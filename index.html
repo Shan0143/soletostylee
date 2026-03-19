@@ -3,612 +3,499 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SoleToStyle — Wear Your Identity</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,600&display=swap" rel="stylesheet">
+<title>SoleToStyle — Trendy Fashion</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --black: #0a0a0a;
-    --cream: #f5f0e8;
-    --gold: #c9a84c;
-    --warm: #e8ddd0;
-    --accent: #8b5e3c;
-    --text: #1a1a1a;
-    --muted: #888;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
+* { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body { font-family:'Inter',sans-serif; background:#f5f5f5; color:#222; overflow-x:hidden; }
 
-  .cursor { width: 12px; height: 12px; background: var(--black); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
-  .cursor-ring { width: 40px; height: 40px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: left .08s, top .08s; }
+.topbar { background:#111; color:#fff; text-align:center; padding:9px; font-size:.75rem; letter-spacing:.5px; position:relative; }
+.topbar span { color:#ff6b35; font-weight:700; }
+.topbar-close { position:absolute; right:16px; top:50%; transform:translateY(-50%); background:none; border:none; color:#fff; font-size:1rem; cursor:pointer; }
 
-  nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(245,240,232,.94); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,168,76,.2); }
-  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--black); text-decoration: none; }
-  .nav-logo span { color: var(--gold); }
-  .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; color: var(--text); text-decoration: none; position: relative; padding-bottom: 4px; }
-  .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--gold); transition: width .3s; }
-  .nav-links a:hover::after { width: 100%; }
-  .nav-actions { display: flex; gap: 20px; align-items: center; }
-  .nav-icon { font-size: 1.15rem; cursor: none; position: relative; }
-  .cart-count { position: absolute; top: -6px; right: -8px; background: var(--gold); color: white; font-size: .6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+header { background:#fff; position:sticky; top:0; z-index:999; box-shadow:0 2px 8px rgba(0,0,0,.08); }
+.header-top { display:flex; align-items:center; justify-content:space-between; padding:14px 40px; gap:20px; }
+.logo { font-size:1.8rem; font-weight:800; color:#111; text-decoration:none; letter-spacing:-1px; }
+.logo span { color:#ff6b35; }
+.search-bar { flex:1; max-width:520px; display:flex; border:2px solid #111; }
+.search-bar input { flex:1; padding:10px 16px; border:none; outline:none; font-size:.88rem; font-family:'Inter',sans-serif; }
+.search-bar button { background:#111; color:#fff; border:none; padding:10px 20px; font-size:.88rem; cursor:pointer; font-weight:600; transition:background .2s; font-family:'Inter',sans-serif; }
+.search-bar button:hover { background:#ff6b35; }
+.header-actions { display:flex; gap:4px; }
+.hbtn { display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 12px; background:none; border:none; cursor:pointer; color:#444; font-family:'Inter',sans-serif; font-size:.63rem; font-weight:600; letter-spacing:.5px; text-transform:uppercase; position:relative; transition:color .2s; }
+.hbtn:hover { color:#ff6b35; }
+.hbtn .ico { font-size:1.3rem; }
+.badge { position:absolute; top:2px; right:4px; background:#ff6b35; color:#fff; font-size:.55rem; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; }
 
-  /* HERO */
-  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
-  .hero-left { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
-  .hero-tag { font-size: .72rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; opacity: 0; animation: fadeUp .8s .2s forwards; }
-  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem,5.5vw,6.5rem); font-weight: 900; line-height: .92; margin-bottom: 28px; opacity: 0; animation: fadeUp .8s .4s forwards; }
-  .hero-title em { font-style: italic; color: var(--accent); display: block; }
-  .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin-bottom: 44px; opacity: 0; animation: fadeUp .8s .6s forwards; }
-  .hero-ctas { display: flex; gap: 16px; opacity: 0; animation: fadeUp .8s .8s forwards; }
-  .btn-primary { padding: 15px 38px; background: var(--black); color: var(--cream); font-size: .76rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 500; border: none; cursor: none; font-family: 'DM Sans',sans-serif; transition: background .3s, transform .2s; }
-  .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
-  .btn-outline { padding: 15px 38px; background: transparent; color: var(--black); font-size: .76rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 500; border: 1.5px solid var(--black); cursor: none; font-family: 'DM Sans',sans-serif; transition: all .3s; }
-  .btn-outline:hover { background: var(--black); color: var(--cream); }
+nav { border-top:1px solid #f0f0f0; padding:0 40px; display:flex; overflow-x:auto; scrollbar-width:none; }
+nav::-webkit-scrollbar { display:none; }
+.nav-item { padding:12px 18px; font-size:.82rem; font-weight:500; color:#333; text-decoration:none; white-space:nowrap; border-bottom:2px solid transparent; transition:all .2s; cursor:pointer; display:block; }
+.nav-item:hover,.nav-item.active { color:#ff6b35; border-bottom-color:#ff6b35; }
+.nav-item.hot { color:#ff3c3c; font-weight:700; }
 
-  .hero-right { background: var(--black); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-  .hero-visual { width: 100%; height: 100%; background: linear-gradient(145deg,#111 0%,#1e1508 55%,#0a0a0a 100%); display: flex; align-items: center; justify-content: center; flex-direction: column; position: relative; }
-  .floating-tag { position: absolute; background: rgba(245,240,232,.1); backdrop-filter: blur(10px); border: 1px solid rgba(201,168,76,.3); padding: 10px 18px; color: var(--cream); font-size: .72rem; letter-spacing: 1px; }
-  .tag-1 { top: 22%; left: 6%; animation: float 4s ease-in-out infinite; }
-  .tag-2 { bottom: 22%; right: 5%; animation: float 4s ease-in-out 2s infinite; }
-  .hero-badge { position: absolute; bottom: 36px; right: 36px; background: var(--gold); width: 96px; height: 96px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: rotateSlow 8s linear infinite; }
-  .hero-badge span { font-size: .52rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); font-weight: 700; text-align: center; line-height: 1.5; }
+/* HERO */
+.hero-grid { display:grid; grid-template-columns:1.2fr 0.8fr; gap:3px; height:440px; padding:10px 40px; background:#f5f5f5; }
+.hero-main { background:linear-gradient(135deg,#0f0f0f 0%,#1a1a2e 60%,#0a0a0a 100%); border-radius:6px; display:flex; align-items:center; padding:48px; position:relative; overflow:hidden; }
+.hero-main::before { content:''; position:absolute; width:400px; height:400px; border-radius:50%; background:rgba(255,107,53,.07); top:-100px; right:-100px; }
+.hero-main::after { content:'🔥 SALE UP TO 40% OFF'; position:absolute; top:20px; right:20px; background:#ff3c3c; color:#fff; padding:5px 14px; font-size:.65rem; font-weight:700; letter-spacing:1.5px; border-radius:2px; }
+.hero-text { position:relative; z-index:1; }
+.hero-sub-tag { font-size:.68rem; letter-spacing:3px; text-transform:uppercase; color:#ff6b35; margin-bottom:14px; font-weight:600; }
+.hero-text h1 { font-size:3rem; font-weight:800; color:#fff; line-height:1.05; margin-bottom:16px; }
+.hero-text h1 em { font-style:italic; color:#ff6b35; display:block; }
+.hero-text p { color:rgba(255,255,255,.55); font-size:.88rem; line-height:1.7; margin-bottom:28px; max-width:340px; }
+.btn-hero { padding:14px 36px; background:#ff6b35; color:#fff; border:none; font-size:.82rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:all .2s; font-family:'Inter',sans-serif; }
+.btn-hero:hover { background:#e55a25; transform:translateY(-2px); }
+.hero-right { display:grid; grid-template-rows:1fr 1fr; gap:3px; }
+.hero-sm { border-radius:6px; overflow:hidden; position:relative; cursor:pointer; }
+.hero-sm img { width:100%; height:100%; object-fit:cover; transition:transform .4s; display:block; }
+.hero-sm:hover img { transform:scale(1.05); }
+.hero-sm-lbl { position:absolute; bottom:12px; left:12px; background:rgba(0,0,0,.6); color:#fff; padding:5px 12px; font-size:.7rem; font-weight:600; border-radius:2px; }
 
-  /* TICKER */
-  .ticker { background: var(--gold); padding: 13px 0; overflow: hidden; white-space: nowrap; }
-  .ticker-inner { display: inline-flex; animation: ticker 22s linear infinite; }
-  .ticker span { font-size: .73rem; letter-spacing: 3px; text-transform: uppercase; color: var(--black); font-weight: 600; padding: 0 36px; }
+/* CAT STRIP */
+.cat-strip { background:#fff; padding:22px 40px; }
+.cat-items { display:flex; justify-content:space-around; }
+.cat-item { display:flex; flex-direction:column; align-items:center; gap:9px; cursor:pointer; padding:10px 16px; border-radius:6px; transition:all .2s; }
+.cat-item:hover { background:#fff5f2; }
+.cat-circle { width:62px; height:62px; border-radius:50%; border:2px solid #eee; display:flex; align-items:center; justify-content:center; font-size:1.7rem; transition:border-color .2s; background:#fafafa; }
+.cat-item:hover .cat-circle { border-color:#ff6b35; }
+.cat-lbl { font-size:.68rem; font-weight:600; color:#444; letter-spacing:.3px; text-align:center; }
 
-  /* CATEGORIES */
-  .categories { padding: 100px 60px; background: var(--black); }
-  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
-  .section-title { font-family: 'Playfair Display',serif; font-size: clamp(2.2rem,3.5vw,4rem); font-weight: 700; color: var(--cream); line-height: 1; }
-  .section-title em { font-style: italic; color: var(--gold); }
-  .section-title.dark { color: var(--black); }
-  .section-title.dark em { color: var(--accent); }
-  .section-link { font-size: .73rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); padding-bottom: 2px; transition: opacity .3s; }
-  .section-link:hover { opacity: .7; }
+/* FLASH SALE */
+.flash-wrap { background:#fff; padding:22px 40px 28px; margin-top:10px; }
+.sec-head { display:flex; align-items:center; gap:12px; margin-bottom:20px; flex-wrap:wrap; }
+.sec-head h2 { font-size:1.25rem; font-weight:800; }
+.badge-pill { padding:4px 12px; font-size:.65rem; font-weight:700; letter-spacing:1px; border-radius:2px; }
+.bp-red { background:#ff3c3c; color:#fff; }
+.bp-orange { background:#ff6b35; color:#fff; }
+.bp-black { background:#111; color:#fff; }
+.bp-gold { background:#c9a84c; color:#fff; }
+.countdown { display:flex; gap:5px; align-items:center; }
+.cd { background:#111; color:#fff; padding:4px 10px; font-size:.82rem; font-weight:700; border-radius:3px; min-width:32px; text-align:center; font-family:'Inter',sans-serif; }
+.cd-dot { color:#ff3c3c; font-weight:700; }
+.view-all { margin-left:auto; font-size:.75rem; color:#ff6b35; font-weight:600; cursor:pointer; border:1.5px solid #ff6b35; padding:6px 16px; border-radius:2px; background:none; font-family:'Inter',sans-serif; transition:all .2s; }
+.view-all:hover { background:#ff6b35; color:#fff; }
 
-  .cat-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; height: 520px; }
-  .cat-card { position: relative; overflow: hidden; cursor: none; }
-  .cat-tall { grid-row: 1 / 3; }
-  .cat-bg { width: 100%; height: 100%; display: flex; align-items: flex-end; padding: 28px; transition: transform .5s ease; }
-  .cat-card:hover .cat-bg { transform: scale(1.05); }
-  .cat-bg-1 { background: linear-gradient(155deg,#1a0f05 0%,#3d2b1f 100%); }
-  .cat-bg-2 { background: linear-gradient(155deg,#0d0d1a 0%,#1f1f3d 100%); }
-  .cat-bg-3 { background: linear-gradient(155deg,#0f1a0a 0%,#243d0f 100%); }
-  .cat-bg-4 { background: linear-gradient(155deg,#1a0a12 0%,#3d1225 100%); }
-  .cat-bg-5 { background: linear-gradient(155deg,#0a1515 0%,#1f3535 100%); }
-  .cat-info { position: relative; z-index: 2; }
-  .cat-label { font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
-  .cat-name { font-family: 'Playfair Display',serif; font-size: 1.4rem; color: var(--cream); font-weight: 700; }
-  .cat-count { font-size: .7rem; color: rgba(245,240,232,.45); margin-top: 4px; }
-  .cat-icon { position: absolute; font-size: 5.5rem; opacity: .07; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-15deg); }
+/* PRODUCT GRID */
+.pgrid { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; }
+.pgrid.g4 { grid-template-columns:repeat(4,1fr); }
 
-  /* PRODUCTS */
-  .products { padding: 100px 60px; background: var(--cream); }
-  .filter-bar { display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
-  .filter-btn { padding: 9px 22px; font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase; background: transparent; border: 1px solid #ccc; cursor: none; font-family: 'DM Sans',sans-serif; font-weight: 500; transition: all .3s; }
-  .filter-btn.active, .filter-btn:hover { background: var(--black); color: var(--cream); border-color: var(--black); }
-  .product-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
-  .product-card { position: relative; cursor: none; }
-  .product-img { aspect-ratio: 3/4; background: var(--warm); position: relative; overflow: hidden; margin-bottom: 14px; }
-  .product-img-inner { width: 100%; height: 100%; position: absolute; inset: 0; }
-  .product-card:hover .product-img img { transform: scale(1.06); transition: transform .5s ease; }
-  .product-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 18px; background: rgba(10,10,10,0); transition: background .3s; }
-  .product-card:hover .product-overlay { background: rgba(10,10,10,.16); }
-  .overlay-btn { width: 100%; padding: 11px; background: var(--black); color: var(--cream); font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: none; font-family: 'DM Sans',sans-serif; font-weight: 500; transform: translateY(10px); opacity: 0; transition: all .3s; }
-  .product-card:hover .overlay-btn { transform: translateY(0); opacity: 1; }
-  .wishlist-btn { position: absolute; top: 14px; right: 14px; background: white; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: .95rem; cursor: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.1); transition: transform .2s; }
-  .wishlist-btn:hover { transform: scale(1.1); }
-  .product-badge { position: absolute; top: 14px; left: 14px; padding: 4px 9px; font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
-  .badge-new { background: var(--black); color: var(--cream); }
-  .badge-sale { background: var(--accent); color: white; }
-  .badge-hot { background: var(--gold); color: var(--black); }
-  .product-name { font-family: 'Playfair Display',serif; font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
-  .product-type { font-size: .68rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
-  .product-price { display: flex; gap: 10px; align-items: center; }
-  .price { font-size: .98rem; font-weight: 600; color: var(--black); }
-  .price-old { font-size: .82rem; color: var(--muted); text-decoration: line-through; }
-  .stars { font-size: .72rem; color: var(--gold); margin-top: 4px; }
-  .size-selector { display: flex; gap: 5px; margin-top: 9px; flex-wrap: wrap; }
-  .size-chip { padding: 4px 9px; font-size: .62rem; border: 1px solid #ddd; cursor: none; transition: all .2s; }
-  .size-chip:hover { border-color: var(--black); background: var(--black); color: white; }
-  .color-dots { display: flex; gap: 6px; margin-top: 8px; }
-  .cdot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); cursor: none; transition: transform .2s; }
-  .cdot:hover { transform: scale(1.35); }
+.pc { background:#fff; border-radius:4px; overflow:hidden; cursor:pointer; position:relative; transition:box-shadow .2s; border:1px solid #eee; }
+.pc:hover { box-shadow:0 8px 28px rgba(0,0,0,.12); }
+.pc-img { position:relative; padding-top:128%; background:#f5f5f5; overflow:hidden; }
+.pc-img img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .45s; display:block; }
+.pc:hover .pc-img img { transform:scale(1.06); }
+.pc-wish { position:absolute; top:8px; right:8px; z-index:3; width:30px; height:30px; background:rgba(255,255,255,.92); border-radius:50%; border:none; font-size:.88rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all .2s; }
+.pc-wish:hover { background:#ff3c3c; }
+.pc-bdg { position:absolute; top:8px; left:8px; z-index:3; }
+.bdg { padding:3px 8px; font-size:.58rem; font-weight:700; letter-spacing:1px; border-radius:2px; }
+.bdg-sale { background:#ff3c3c; color:#fff; }
+.bdg-new { background:#111; color:#fff; }
+.bdg-hot { background:#ff6b35; color:#fff; }
+.pc-hover { position:absolute; inset:0; z-index:2; display:flex; align-items:flex-end; padding:10px; background:rgba(0,0,0,0); transition:background .3s; }
+.pc:hover .pc-hover { background:rgba(0,0,0,.1); }
+.atc { width:100%; padding:9px; background:#111; color:#fff; border:none; font-size:.68rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; cursor:pointer; font-family:'Inter',sans-serif; border-radius:2px; transform:translateY(8px); opacity:0; transition:all .25s; }
+.pc:hover .atc { transform:translateY(0); opacity:1; }
+.pc-info { padding:10px 10px 13px; }
+.pc-name { font-size:.78rem; font-weight:600; color:#222; margin-bottom:5px; line-height:1.35; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.pc-price { display:flex; gap:7px; align-items:center; margin-bottom:5px; }
+.p-now { font-size:.88rem; font-weight:700; color:#ff3c3c; }
+.p-was { font-size:.72rem; color:#bbb; text-decoration:line-through; }
+.p-pct { font-size:.65rem; color:#ff3c3c; font-weight:600; }
+.pc-meta { font-size:.65rem; color:#f5a623; }
+.pc-sizes { display:flex; gap:4px; flex-wrap:wrap; margin-top:6px; }
+.sz { padding:2px 7px; border:1px solid #e0e0e0; font-size:.58rem; border-radius:2px; color:#666; cursor:pointer; transition:all .15s; }
+.sz:hover { border-color:#111; color:#111; }
 
-  /* BANNER */
-  .banner { background: var(--black); padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; overflow: hidden; }
-  .banner::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 70%); top: -100px; right: -100px; }
-  .banner-title { font-family: 'Playfair Display',serif; font-size: clamp(2.2rem,3.8vw,4.8rem); color: var(--cream); font-weight: 900; line-height: 1; margin-bottom: 18px; }
-  .banner-title em { font-style: italic; color: var(--gold); }
-  .banner-sub { color: rgba(245,240,232,.6); line-height: 1.7; margin-bottom: 30px; }
-  .counter-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 38px; padding-top: 38px; border-top: 1px solid rgba(245,240,232,.1); }
-  .counter { text-align: center; }
-  .counter-num { font-family: 'Playfair Display',serif; font-size: 2.2rem; font-weight: 900; color: var(--gold); display: block; }
-  .counter-label { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
-  .dial-wrap { display: flex; align-items: center; justify-content: center; }
-  .dial { width: 280px; height: 280px; border-radius: 50%; border: 1px solid rgba(201,168,76,.25); position: relative; display: flex; align-items: center; justify-content: center; }
-  .dial-inner { width: 180px; height: 180px; border-radius: 50%; border: 1px dashed rgba(201,168,76,.2); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display',serif; font-size: 1rem; font-style: italic; color: rgba(201,168,76,.7); text-align: center; line-height: 1.4; }
-  .orbit-ring { position: absolute; width: 320px; height: 320px; border-radius: 50%; border: 1px dashed rgba(201,168,76,.15); animation: rotateSlow 14s linear infinite; }
-  .orbit-dot { position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; transform: translateX(-50%); }
+/* PROMO STRIP */
+.promo-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; padding:10px 40px; }
+.promo { border-radius:6px; padding:24px; display:flex; justify-content:space-between; align-items:center; cursor:pointer; overflow:hidden; position:relative; }
+.promo-1 { background:linear-gradient(135deg,#1a0808,#3d1010); }
+.promo-2 { background:linear-gradient(135deg,#080a1a,#10143d); }
+.promo-3 { background:linear-gradient(135deg,#0a0a0a,#1a1a1a); }
+.promo-text h4 { font-size:1rem; font-weight:800; color:#fff; line-height:1.3; }
+.promo-text p { font-size:.72rem; color:rgba(255,255,255,.5); margin-top:4px; margin-bottom:14px; }
+.promo-btn { padding:7px 18px; background:#ff6b35; color:#fff; border:none; font-size:.7rem; font-weight:700; border-radius:2px; cursor:pointer; font-family:'Inter',sans-serif; }
+.promo-ico { font-size:3.5rem; opacity:.65; }
 
-  /* TESTIMONIALS */
-  .testimonials { padding: 100px 60px; background: var(--warm); }
-  .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 48px; }
-  .testi-card { background: var(--cream); padding: 34px; position: relative; }
-  .big-quote { font-family: 'Playfair Display',serif; font-size: 4.5rem; color: var(--gold); opacity: .18; position: absolute; top: 14px; left: 22px; line-height: 1; }
-  .testi-stars { position: absolute; top: 34px; right: 34px; color: var(--gold); font-size: .82rem; }
-  .testi-quote { font-family: 'Cormorant Garamond',serif; font-size: 1.15rem; font-style: italic; line-height: 1.6; margin-bottom: 22px; }
-  .testi-author { display: flex; gap: 11px; align-items: center; }
-  .testi-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
-  .testi-name { font-weight: 600; font-size: .88rem; }
-  .testi-loc { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+/* SECTION WRAPPER */
+.sec-wrap { background:#fff; padding:24px 40px 32px; margin-top:10px; }
 
-  /* INSTA */
-  .insta-strip { padding: 80px 60px; background: var(--black); }
-  .insta-handle { font-family: 'Cormorant Garamond',serif; font-style: italic; font-size: 1.2rem; color: var(--gold); margin-bottom: 36px; display: block; }
-  .insta-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 3px; }
-  .insta-item { aspect-ratio: 1; position: relative; overflow: hidden; cursor: none; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
-  .insta-item:hover::after { content: '♡  View'; position: absolute; inset: 0; background: rgba(201,168,76,.88); display: flex; align-items: center; justify-content: center; font-size: .73rem; letter-spacing: 2px; color: var(--black); font-family: 'DM Sans',sans-serif; font-weight: 600; }
-  .ig-bg-1{background:linear-gradient(135deg,#1e1508,#3d2b0f)} .ig-bg-2{background:linear-gradient(135deg,#0f0f1e,#1f1f3d)} .ig-bg-3{background:linear-gradient(135deg,#0e1a0e,#1f3d1f)} .ig-bg-4{background:linear-gradient(135deg,#1e0a0e,#3d1220)} .ig-bg-5{background:linear-gradient(135deg,#0e1616,#1f3535)} .ig-bg-6{background:linear-gradient(135deg,#1e1a08,#3d350f)}
+/* CART */
+.cart-drawer { position:fixed; top:0; right:-480px; width:480px; height:100vh; background:#fff; z-index:2000; transition:right .35s cubic-bezier(.4,0,.2,1); box-shadow:-4px 0 30px rgba(0,0,0,.14); display:flex; flex-direction:column; }
+.cart-drawer.open { right:0; }
+.c-head { padding:18px 22px; border-bottom:1px solid #eee; display:flex; justify-content:space-between; align-items:center; }
+.c-head h3 { font-size:1rem; font-weight:700; }
+.c-close { background:none; border:none; font-size:1.3rem; cursor:pointer; color:#666; }
+.c-body { flex:1; overflow-y:auto; padding:14px 22px; }
+.ci { display:grid; grid-template-columns:80px 1fr auto; gap:14px; align-items:center; padding:13px 0; border-bottom:1px solid #f5f5f5; }
+.ci-img img { width:80px; height:96px; object-fit:cover; display:block; border-radius:3px; }
+.ci-name { font-size:.82rem; font-weight:600; margin-bottom:4px; }
+.ci-sub { font-size:.7rem; color:#aaa; margin-bottom:5px; }
+.ci-price { font-size:.88rem; font-weight:700; color:#ff3c3c; }
+.ci-del { background:none; border:none; color:#ccc; cursor:pointer; font-size:1rem; transition:color .2s; }
+.ci-del:hover { color:#ff3c3c; }
+.c-empty { text-align:center; padding:60px 20px; color:#bbb; font-size:.9rem; }
+.c-foot { padding:18px 22px; border-top:2px solid #111; }
+.c-total-row { display:flex; justify-content:space-between; margin-bottom:14px; align-items:center; }
+.c-total-lbl { font-size:.8rem; color:#888; }
+.c-total-val { font-size:1.15rem; font-weight:800; color:#ff3c3c; }
+.c-checkout { width:100%; padding:14px; background:#ff6b35; color:#fff; border:none; font-size:.85rem; font-weight:700; letter-spacing:1px; cursor:pointer; font-family:'Inter',sans-serif; border-radius:2px; transition:background .2s; }
+.c-checkout:hover { background:#e55a25; }
+.overlay { position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:1999; display:none; }
+.overlay.open { display:block; }
+.toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(80px); background:#111; color:#fff; padding:11px 24px; font-size:.78rem; z-index:9999; border-left:3px solid #ff6b35; transition:transform .35s; border-radius:2px; white-space:nowrap; }
+.toast.show { transform:translateX(-50%) translateY(0); }
 
-  /* NEWSLETTER */
-  .newsletter { background: var(--gold); padding: 68px 60px; text-align: center; }
-  .newsletter-title { font-family: 'Playfair Display',serif; font-size: 2.4rem; font-weight: 900; color: var(--black); margin-bottom: 10px; }
-  .newsletter-sub { color: rgba(10,10,10,.65); margin-bottom: 30px; }
-  .newsletter-form { display: flex; max-width: 460px; margin: 0 auto; }
-  .newsletter-input { flex: 1; padding: 15px 18px; background: var(--black); border: none; color: var(--cream); font-family: 'DM Sans',sans-serif; font-size: .88rem; outline: none; }
-  .newsletter-input::placeholder { color: rgba(245,240,232,.35); }
-  .newsletter-btn { padding: 15px 26px; background: var(--cream); border: none; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; cursor: none; font-family: 'DM Sans',sans-serif; transition: opacity .3s; }
-  .newsletter-btn:hover { opacity: .75; }
+/* FOOTER */
+footer { background:#111; color:#888; padding:48px 40px 24px; margin-top:12px; }
+.footer-grid { display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:40px; margin-bottom:40px; }
+.f-logo { font-size:1.6rem; font-weight:800; color:#fff; display:block; margin-bottom:14px; text-decoration:none; }
+.f-logo span { color:#ff6b35; }
+.f-desc { font-size:.8rem; line-height:1.7; margin-bottom:18px; }
+.f-socials { display:flex; gap:9px; }
+.f-soc { width:34px; height:34px; border:1px solid #333; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:.85rem; cursor:pointer; transition:all .2s; }
+.f-soc:hover { background:#ff6b35; border-color:#ff6b35; }
+.f-col h4 { color:#fff; font-size:.75rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:16px; }
+.f-col ul { list-style:none; display:flex; flex-direction:column; gap:8px; }
+.f-col a { color:#666; font-size:.78rem; text-decoration:none; transition:color .2s; }
+.f-col a:hover { color:#ff6b35; }
+.f-bottom { padding-top:24px; border-top:1px solid #222; display:flex; justify-content:space-between; align-items:center; }
+.f-copy { font-size:.7rem; color:#444; }
+.f-pays { display:flex; gap:7px; }
+.f-pay { padding:3px 10px; border:1px solid #333; font-size:.65rem; color:#555; border-radius:2px; }
 
-  /* FOOTER */
-  footer { background: var(--black); padding: 76px 60px 38px; border-top: 1px solid rgba(201,168,76,.18); }
-  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
-  .footer-logo { font-family: 'Playfair Display',serif; font-size: 1.75rem; font-weight: 900; color: var(--cream); margin-bottom: 14px; display: block; }
-  .footer-logo span { color: var(--gold); }
-  .footer-tagline { color: var(--muted); font-size: .83rem; line-height: 1.7; margin-bottom: 22px; }
-  .social-links { display: flex; gap: 10px; }
-  .social-link { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; color: var(--cream); font-size: .88rem; transition: all .3s; cursor: none; text-decoration: none; }
-  .social-link:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
-  .footer-heading { font-size: .68rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--cream); font-weight: 600; margin-bottom: 18px; }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
-  .footer-links a { color: var(--muted); font-size: .83rem; text-decoration: none; transition: color .2s; }
-  .footer-links a:hover { color: var(--gold); }
-  .footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; }
-  .footer-copy { font-size: .73rem; color: var(--muted); }
-  .pay-icon { padding: 4px 11px; border: 1px solid rgba(255,255,255,.14); font-size: .68rem; color: var(--muted); border-radius: 3px; }
-  .payment-icons { display: flex; gap: 7px; }
-
-  /* CART */
-  .cart-drawer { position: fixed; top: 0; right: -430px; width: 430px; height: 100vh; background: var(--cream); z-index: 2000; transition: right .4s cubic-bezier(.4,0,.2,1); padding: 38px; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,.14); }
-  .cart-drawer.open { right: 0; }
-  .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-  .cart-title { font-family: 'Playfair Display',serif; font-size: 1.45rem; font-weight: 700; }
-  .cart-close { background: none; border: none; font-size: 1.4rem; cursor: none; }
-  .cart-item { display: grid; grid-template-columns: 68px 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--warm); }
-  .cart-item-img { background: var(--warm); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; }
-  .cart-item-name { font-weight: 600; font-size: .88rem; margin-bottom: 3px; }
-  .cart-item-size { font-size: .72rem; color: var(--muted); }
-  .cart-item-price { font-weight: 600; }
-  .cart-total { margin-top: 22px; padding-top: 22px; border-top: 2px solid var(--black); display: flex; justify-content: space-between; align-items: center; }
-  .cart-total-label { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
-  .cart-total-price { font-family: 'Playfair Display',serif; font-size: 1.45rem; font-weight: 700; }
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.38); z-index: 1999; display: none; }
-  .overlay.open { display: block; }
-
-  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--black); color: var(--cream); padding: 13px 26px; font-size: .78rem; letter-spacing: 1px; z-index: 9999; transition: transform .4s cubic-bezier(.4,0,.2,1); border-left: 3px solid var(--gold); }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-
-  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
-  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
-  @keyframes rotateSlow { from{transform:rotate(0)} to{transform:rotate(360deg)} }
-  @keyframes sway { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
-
-  @media(max-width:1024px){
-    .hero{grid-template-columns:1fr} .hero-right{min-height:380px}
-    .product-grid{grid-template-columns:repeat(2,1fr)}
-    .cat-grid{grid-template-columns:1fr 1fr;height:auto;grid-template-rows:auto}
-    .cat-tall{grid-row:auto}
-    .footer-top{grid-template-columns:1fr 1fr}
-    .testi-grid{grid-template-columns:1fr}
-    .insta-grid{grid-template-columns:repeat(3,1fr)}
-    .banner{grid-template-columns:1fr}
-    nav,.hero-left,.categories,.products,.banner,.newsletter,footer,.testimonials,.insta-strip{padding-left:24px;padding-right:24px}
-  }
+@media(max-width:1024px){
+  .header-top,.nav,.flash-wrap,.sec-wrap,.promo-row,.cat-strip,footer { padding-left:16px; padding-right:16px; }
+  .hero-grid { padding:8px 16px; height:auto; grid-template-columns:1fr; }
+  .hero-right { grid-template-rows:none; grid-template-columns:1fr 1fr; height:200px; }
+  .pgrid { grid-template-columns:repeat(2,1fr); }
+  .pgrid.g4 { grid-template-columns:repeat(2,1fr); }
+  .promo-row { grid-template-columns:1fr; padding:8px 16px; }
+  .footer-grid { grid-template-columns:1fr 1fr; }
+  .cart-drawer { width:100%; right:-100%; }
+}
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursorRing"></div>
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="toast" id="toast"></div>
 
 <!-- CART -->
 <div class="cart-drawer" id="cartDrawer">
-  <div class="cart-header">
-    <span class="cart-title">Your Bag</span>
-    <button class="cart-close" onclick="toggleCart()">✕</button>
+  <div class="c-head">
+    <h3>My Bag (<span id="cartCountHead">0</span> items)</h3>
+    <button class="c-close" onclick="toggleCart()">✕</button>
   </div>
-  <div id="cartItems"></div>
-  <div class="cart-total" id="cartTotal" style="display:none">
-    <div>
-      <div class="cart-total-label">Total</div>
-      <div style="font-size:.7rem;color:var(--muted);margin-top:3px">Free shipping above ₹1999</div>
-    </div>
-    <div class="cart-total-price" id="totalPrice">₹0</div>
+  <div class="c-body" id="cartBody"><div class="c-empty">🛍️<br><br>Your bag is empty</div></div>
+  <div class="c-foot" id="cartFoot" style="display:none">
+    <div class="c-total-row"><span class="c-total-lbl">Subtotal</span><span class="c-total-val" id="cartTotalVal">₹0</span></div>
+    <div style="font-size:.7rem;color:#bbb;margin-bottom:14px">🚚 Free shipping above ₹1999</div>
+    <button class="c-checkout">Proceed to Checkout →</button>
   </div>
-  <button class="btn-primary" style="width:100%;margin-top:18px;display:none" id="checkoutBtn">Checkout Now</button>
-  <p style="text-align:center;color:var(--muted);font-size:.75rem;margin-top:14px" id="emptyCart">Your bag is empty ✨</p>
 </div>
-<div class="toast" id="toast"></div>
 
-<!-- NAV -->
-<nav>
-  <a class="nav-logo" href="#"><span>Sole</span>ToStyle</a>
-  <ul class="nav-links">
-    <li><a href="#products">Shop</a></li>
-    <li><a href="#categories">Categories</a></li>
-    <li><a href="#about">About</a></li>
-    <li><a href="#insta">Lookbook</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
-  <div class="nav-actions">
-    <span class="nav-icon">🔍</span>
-    <span class="nav-icon">♡</span>
-    <span class="nav-icon" onclick="toggleCart()" style="position:relative">🛍️<span class="cart-count" id="cartCount">0</span></span>
+<!-- TOP BAR -->
+<div class="topbar">
+  🔥 Use code <span>STYLE20</span> for 20% OFF on first order! &nbsp;|&nbsp; Free shipping above ₹1999 &nbsp;|&nbsp; COD Available
+  <button class="topbar-close" onclick="this.parentElement.style.display='none'">×</button>
+</div>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <a class="logo" href="#"><span>Sole</span>ToStyle</a>
+    <div class="search-bar">
+      <input type="text" placeholder="Search bellbottoms, baggy jeans, shirts...">
+      <button>🔍 Search</button>
+    </div>
+    <div class="header-actions">
+      <button class="hbtn"><span class="ico">👤</span>Account</button>
+      <button class="hbtn"><span class="ico">🤍</span>Wishlist</button>
+      <button class="hbtn" onclick="toggleCart()"><span class="ico">🛍️</span>Bag<span class="badge" id="cartBadge">0</span></button>
+    </div>
   </div>
-</nav>
+  <nav>
+    <a class="nav-item hot" href="#">🔥 Sale</a>
+    <a class="nav-item active" href="#">New In</a>
+    <a class="nav-item" href="#bellbottom">Bellbottoms</a>
+    <a class="nav-item" href="#baggy">Baggy Jeans</a>
+    <a class="nav-item" href="#formal">Formal Pants</a>
+    <a class="nav-item" href="#tshirts">T-Shirts</a>
+    <a class="nav-item" href="#shirts">Shirts</a>
+    <a class="nav-item" href="#">Combos</a>
+    <a class="nav-item" href="#">Under ₹999</a>
+  </nav>
+</header>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-left">
-    <p class="hero-tag">✦ New Drop — SS 2025</p>
-    <h1 class="hero-title">Dress to<br><em>Dominate</em></h1>
-    <p class="hero-sub">Bellbottoms that flare with attitude. Baggy fits that breathe freedom. Premium shirts that mean business. This is SoleToStyle.</p>
-    <div class="hero-ctas">
-      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Collection</button>
-      <button class="btn-outline">View Lookbook</button>
+<div class="hero-grid">
+  <div class="hero-main">
+    <div class="hero-text">
+      <div class="hero-sub-tag">✦ New Collection — SS 2025</div>
+      <h1>Wear What<br><em>You Feel</em></h1>
+      <p>Bellbottoms. Baggys. Premium Shirts. Style that speaks louder than words — only at SoleToStyle.</p>
+      <button class="btn-hero" onclick="document.getElementById('flashSale').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
     </div>
   </div>
   <div class="hero-right">
-    <div class="hero-visual">
-      <!-- Outfit SVG illustration -->
-      <svg width="230" height="370" viewBox="0 0 230 370" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:sway 5s ease-in-out infinite;transform-origin:50% 10%">
-        <!-- Head -->
-        <ellipse cx="115" cy="36" rx="20" ry="24" fill="#e0cba8"/>
-        <!-- Neck -->
-        <rect x="109" y="56" width="12" height="16" fill="#e0cba8"/>
-        <!-- Premium shirt body -->
-        <path d="M64 74 L109 64 L115 78 L121 64 L166 74 L170 148 L60 148 Z" fill="#f5f0e8"/>
-        <!-- Shirt vertical stripes -->
-        <line x1="80" y1="74" x2="76" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
-        <line x1="95" y1="70" x2="92" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
-        <line x1="115" y1="78" x2="115" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
-        <line x1="135" y1="70" x2="138" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
-        <line x1="150" y1="74" x2="154" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
-        <!-- Collar -->
-        <path d="M109 64 L115 86 L121 64" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
-        <!-- Buttons -->
-        <circle cx="115" cy="98" r="2.5" fill="#c9a84c"/>
-        <circle cx="115" cy="113" r="2.5" fill="#c9a84c"/>
-        <circle cx="115" cy="128" r="2.5" fill="#c9a84c"/>
-        <!-- Sleeves -->
-        <path d="M64 74 L36 114 L50 120 L70 88 Z" fill="#ece7dc"/>
-        <path d="M166 74 L194 114 L180 120 L160 88 Z" fill="#ece7dc"/>
-        <!-- Belt -->
-        <rect x="60" y="145" width="110" height="9" fill="#6b3f1f" rx="1"/>
-        <rect x="109" y="144" width="12" height="11" fill="#c9a84c" rx="1"/>
-        <!-- BELLBOTTOM JEANS waist -->
-        <path d="M60 153 L170 153 L163 235 L131 235 L115 195 L99 235 L67 235 Z" fill="#1c2040"/>
-        <!-- Left flare leg -->
-        <path d="M67 235 L58 308 L30 342 L50 349 L84 312 L99 235 Z" fill="#1c2040"/>
-        <!-- Right flare leg -->
-        <path d="M131 235 L146 312 L180 349 L200 342 L172 308 L163 235 Z" fill="#1c2040"/>
-        <!-- Denim texture lines -->
-        <line x1="115" y1="153" x2="115" y2="195" stroke="rgba(201,168,76,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
-        <line x1="85" y1="235" x2="56" y2="328" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-        <line x1="144" y1="235" x2="172" y2="328" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
-        <!-- Flare hem highlights -->
-        <path d="M30 342 Q40 346 50 349" stroke="#c9a84c" stroke-width="1.2" opacity="0.6" fill="none"/>
-        <path d="M180 349 Q190 346 200 342" stroke="#c9a84c" stroke-width="1.2" opacity="0.6" fill="none"/>
-        <!-- Pocket detail -->
-        <path d="M75 165 Q82 162 90 165 L88 185 Q82 188 76 185 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-        <path d="M130 165 Q138 162 145 165 L143 185 Q137 188 131 185 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
-      </svg>
-      <div class="floating-tag tag-1">✦ Premium Cotton</div>
-      <div class="floating-tag tag-2">Flare Season Is Back</div>
-      <div class="hero-badge"><span>New<br>Drop<br>2025</span></div>
+    <div class="hero-sm">
+      <img src="Bellbotom_no_1.jpg" alt="Bellbottom">
+      <div class="hero-sm-lbl">👖 Bellbottoms</div>
     </div>
-  </div>
-</section>
-
-<!-- TICKER -->
-<div class="ticker">
-  <div class="ticker-inner">
-    <span>Free Shipping Above ₹1999</span><span>✦</span><span>Bellbottoms Are Back & Bigger</span><span>✦</span><span>Premium Handpicked Fabrics</span><span>✦</span><span>Easy 7-Day Returns</span><span>✦</span><span>COD Available Pan India</span><span>✦</span><span>Follow @soletostylee on Instagram</span><span>✦</span>
-    <span>Free Shipping Above ₹1999</span><span>✦</span><span>Bellbottoms Are Back & Bigger</span><span>✦</span><span>Premium Handpicked Fabrics</span><span>✦</span><span>Easy 7-Day Returns</span><span>✦</span><span>COD Available Pan India</span><span>✦</span><span>Follow @soletostylee on Instagram</span><span>✦</span>
+    <div class="hero-sm">
+      <img src="baggy_jeans_no_1.jpg" alt="Baggy">
+      <div class="hero-sm-lbl">Baggy Fits</div>
+    </div>
   </div>
 </div>
 
-<!-- CATEGORIES -->
-<section class="categories" id="categories">
-  <div class="section-header">
-    <h2 class="section-title">Shop by<br><em>Vibe</em></h2>
-    <a href="#" class="section-link">All Categories →</a>
+<!-- CATEGORY STRIP -->
+<div class="cat-strip">
+  <div class="cat-items">
+    <div class="cat-item"><div class="cat-circle">👖</div><span class="cat-lbl">Bellbottoms</span></div>
+    <div class="cat-item"><div class="cat-circle">🩳</div><span class="cat-lbl">Baggy Jeans</span></div>
+    <div class="cat-item"><div class="cat-circle">👔</div><span class="cat-lbl">Formal Pants</span></div>
+    <div class="cat-item"><div class="cat-circle">👕</div><span class="cat-lbl">T-Shirts</span></div>
+    <div class="cat-item"><div class="cat-circle">🧥</div><span class="cat-lbl">Shirts</span></div>
+    <div class="cat-item"><div class="cat-circle">🎁</div><span class="cat-lbl">Combos</span></div>
+    <div class="cat-item"><div class="cat-circle">🏷️</div><span class="cat-lbl">Under ₹999</span></div>
   </div>
-  <div class="cat-grid">
-    <div class="cat-card cat-tall">
-      <div class="cat-bg cat-bg-1" style="height:100%">
-        <div class="cat-icon">👖</div>
-        <div class="cat-info">
-          <div class="cat-label">Iconic</div>
-          <div class="cat-name">Bellbottom Jeans</div>
-          <div class="cat-count">34 Styles</div>
-        </div>
-      </div>
-    </div>
-    <div class="cat-card">
-      <div class="cat-bg cat-bg-2" style="height:100%">
-        <div class="cat-icon">🩳</div>
-        <div class="cat-info"><div class="cat-label">Street</div><div class="cat-name">Baggy Pants</div><div class="cat-count">41 Styles</div></div>
-      </div>
-    </div>
-    <div class="cat-card">
-      <div class="cat-bg cat-bg-4" style="height:100%">
-        <div class="cat-icon">👕</div>
-        <div class="cat-info"><div class="cat-label">Casual</div><div class="cat-name">T-Shirts</div><div class="cat-count">56 Styles</div></div>
-      </div>
-    </div>
-    <div class="cat-card">
-      <div class="cat-bg cat-bg-3" style="height:100%">
-        <div class="cat-icon">👔</div>
-        <div class="cat-info"><div class="cat-label">Formal</div><div class="cat-name">Formal Baggy</div><div class="cat-count">28 Styles</div></div>
-      </div>
-    </div>
-    <div class="cat-card">
-      <div class="cat-bg cat-bg-5" style="height:100%">
-        <div class="cat-icon">🧥</div>
-        <div class="cat-info"><div class="cat-label">Premium</div><div class="cat-name">Premium Shirts</div><div class="cat-count">39 Styles</div></div>
-      </div>
-    </div>
-  </div>
-</section>
+</div>
 
-<!-- PRODUCTS -->
-<section class="products" id="products">
-  <div class="section-header">
-    <h2 class="section-title dark">Trending<br><em>Right Now</em></h2>
-    <a href="#" class="section-link" style="color:var(--accent);border-color:var(--accent)">View All →</a>
+<!-- FLASH SALE -->
+<div class="flash-wrap" id="flashSale">
+  <div class="sec-head">
+    <h2>⚡ Flash Sale</h2>
+    <span class="badge-pill bp-red">LIMITED STOCK</span>
+    <div class="countdown">
+      <div class="cd" id="cdH">02</div><span class="cd-dot">:</span>
+      <div class="cd" id="cdM">45</div><span class="cd-dot">:</span>
+      <div class="cd" id="cdS">30</div>
+    </div>
+    <button class="view-all">View All →</button>
   </div>
-  <div class="filter-bar">
-    <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
-    <button class="filter-btn" onclick="setFilter(this,'bellbottom')">Bellbottoms</button>
-    <button class="filter-btn" onclick="setFilter(this,'baggy')">Baggy Pants</button>
-    <button class="filter-btn" onclick="setFilter(this,'formal')">Formal Baggy</button>
-    <button class="filter-btn" onclick="setFilter(this,'tshirt')">T-Shirts</button>
-    <button class="filter-btn" onclick="setFilter(this,'shirt')">Premium Shirts</button>
-    <button class="filter-btn" onclick="setFilter(this,'sale')">On Sale</button>
-  </div>
-  <div class="product-grid" id="productGrid"></div>
-</section>
+  <div class="pgrid" id="flashGrid"></div>
+</div>
 
-<!-- BANNER -->
-<section class="banner" id="about">
-  <div>
-    <h2 class="banner-title">Fabric of<br><em>Your Identity</em></h2>
-    <p class="banner-sub">Every thread at SoleToStyle is chosen with intention. We craft clothes for people who refuse to blend in — from flared bellbottoms on the streets to sharp formal baggy trousers in the boardroom.</p>
-    <button class="btn-primary">Our Story →</button>
-    <div class="counter-row">
-      <div class="counter"><span class="counter-num">8K+</span><span class="counter-label">Happy Customers</span></div>
-      <div class="counter"><span class="counter-num">200+</span><span class="counter-label">Styles</span></div>
-      <div class="counter"><span class="counter-num">4.9★</span><span class="counter-label">Avg Rating</span></div>
-    </div>
+<!-- PROMO ROW -->
+<div class="promo-row">
+  <div class="promo promo-1">
+    <div class="promo-text"><h4>Bellbottom<br>Collection</h4><p>70s vibes, 2025 fit</p><button class="promo-btn" onclick="document.getElementById('bellbottom').scrollIntoView({behavior:'smooth'})">Shop Now</button></div>
+    <span class="promo-ico">👖</span>
   </div>
-  <div class="dial-wrap">
-    <div class="dial">
-      <div class="orbit-ring"><div class="orbit-dot"></div></div>
-      <div class="dial-inner">Wear Your<br>Identity</div>
-    </div>
+  <div class="promo promo-2">
+    <div class="promo-text"><h4>Baggy Jeans<br>Drop</h4><p>Street style essentials</p><button class="promo-btn" onclick="document.getElementById('baggy').scrollIntoView({behavior:'smooth'})">Shop Now</button></div>
+    <span class="promo-ico">🩳</span>
   </div>
-</section>
+  <div class="promo promo-3">
+    <div class="promo-text"><h4>Premium<br>Shirts</h4><p>Dress to impress</p><button class="promo-btn" onclick="document.getElementById('shirts').scrollIntoView({behavior:'smooth'})">Shop Now</button></div>
+    <span class="promo-ico">🧥</span>
+  </div>
+</div>
 
-<!-- TESTIMONIALS -->
-<section class="testimonials">
-  <h2 class="section-title dark" style="text-align:center;margin-bottom:0">What Our <em style="font-style:italic;color:var(--accent)">Style Gang</em> Says</h2>
-  <div class="testi-grid">
-    <div class="testi-card">
-      <div class="big-quote">"</div>
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">The bellbottoms are EVERYTHING. Wore them to college and literally everyone stopped to ask where I got them. Quality is fire!</p>
-      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Rohan Kapoor</div><div class="testi-loc">Delhi, India</div></div></div>
-    </div>
-    <div class="testi-card">
-      <div class="big-quote">"</div>
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">Ordered the formal baggy trousers for an interview — got the job AND got compliments on my fit. This brand understands style!</p>
-      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Sneha Patel</div><div class="testi-loc">Ahmedabad, India</div></div></div>
-    </div>
-    <div class="testi-card">
-      <div class="big-quote">"</div>
-      <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">Premium shirts at this price? Unreal. The fabric, the fit, the finish — feels like a designer brand. Will always come back!</p>
-      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Arjun Singh</div><div class="testi-loc">Chandigarh, India</div></div></div>
-    </div>
+<!-- BELLBOTTOMS -->
+<div class="sec-wrap" id="bellbottom">
+  <div class="sec-head">
+    <h2>👖 Bellbottom Jeans</h2>
+    <span class="badge-pill bp-orange">NEW DROP</span>
+    <button class="view-all">View All →</button>
   </div>
-</section>
+  <div class="pgrid g4" id="bellGrid"></div>
+</div>
 
-<!-- INSTA -->
-<section class="insta-strip" id="insta">
-  <h2 class="section-title" style="margin-bottom:12px">As Seen on</h2>
-  <span class="insta-handle">@soletostylee</span>
-  <div class="insta-grid">
-    <div class="insta-item ig-bg-1">👖</div>
-    <div class="insta-item ig-bg-2">👕</div>
-    <div class="insta-item ig-bg-3">🧥</div>
-    <div class="insta-item ig-bg-4">🩳</div>
-    <div class="insta-item ig-bg-5">👔</div>
-    <div class="insta-item ig-bg-6">👗</div>
+<!-- BAGGY JEANS -->
+<div class="sec-wrap" id="baggy" style="margin-top:10px">
+  <div class="sec-head">
+    <h2>🩳 Baggy Jeans</h2>
+    <span class="badge-pill bp-black">TRENDING</span>
+    <button class="view-all">View All →</button>
   </div>
-</section>
+  <div class="pgrid g4" id="baggyGrid"></div>
+</div>
 
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <h2 class="newsletter-title">Get First Dibs on New Drops</h2>
-  <p class="newsletter-sub">Join 8,000+ styleheads. First access to new arrivals, member deals & style inspo.</p>
-  <div class="newsletter-form">
-    <input class="newsletter-input" type="email" placeholder="your@email.com">
-    <button class="newsletter-btn">Subscribe</button>
+<!-- T-SHIRTS -->
+<div class="sec-wrap" id="tshirts" style="margin-top:10px">
+  <div class="sec-head">
+    <h2>👕 T-Shirts</h2>
+    <span class="badge-pill bp-red">BESTSELLER</span>
+    <button class="view-all">View All →</button>
   </div>
-</section>
+  <div class="pgrid g4" id="tshirtGrid"></div>
+</div>
+
+<!-- SHIRTS -->
+<div class="sec-wrap" id="shirts" style="margin-top:10px">
+  <div class="sec-head">
+    <h2>🧥 Premium Shirts</h2>
+    <span class="badge-pill bp-gold">PREMIUM</span>
+    <button class="view-all">View All →</button>
+  </div>
+  <div class="pgrid g4" id="shirtGrid"></div>
+</div>
 
 <!-- FOOTER -->
-<footer id="contact">
-  <div class="footer-top">
+<footer>
+  <div class="footer-grid">
     <div>
-      <span class="footer-logo"><span>Sole</span>ToStyle</span>
-      <p class="footer-tagline">Wear your identity. From bellbottom flares to premium shirts — fashion that speaks before you do. Made for the bold.</p>
-      <div class="social-links">
-        <a class="social-link" href="https://www.instagram.com/soletostylee" target="_blank">📷</a>
-        <a class="social-link" href="#">𝕏</a>
-        <a class="social-link" href="#">📘</a>
-        <a class="social-link" href="#">▶</a>
+      <a class="f-logo" href="#"><span>Sole</span>ToStyle</a>
+      <p class="f-desc">Trendy fashion for the bold generation. Bellbottom flares to oversized tees — we dress those who refuse to blend in.</p>
+      <div class="f-socials">
+        <div class="f-soc">📷</div><div class="f-soc">𝕏</div><div class="f-soc">📘</div><div class="f-soc">▶</div>
       </div>
     </div>
-    <div>
-      <div class="footer-heading">Shop</div>
-      <ul class="footer-links">
+    <div class="f-col">
+      <h4>Shop</h4>
+      <ul>
         <li><a href="#">New Arrivals</a></li>
         <li><a href="#">Bellbottom Jeans</a></li>
-        <li><a href="#">Baggy Pants</a></li>
-        <li><a href="#">Formal Baggy</a></li>
+        <li><a href="#">Baggy Jeans</a></li>
+        <li><a href="#">Formal Pants</a></li>
         <li><a href="#">T-Shirts</a></li>
         <li><a href="#">Premium Shirts</a></li>
         <li><a href="#">Sale</a></li>
       </ul>
     </div>
-    <div>
-      <div class="footer-heading">Help</div>
-      <ul class="footer-links">
+    <div class="f-col">
+      <h4>Help</h4>
+      <ul>
         <li><a href="#">Size Guide</a></li>
         <li><a href="#">Track Order</a></li>
-        <li><a href="#">Returns & Exchange</a></li>
-        <li><a href="#">Shipping Policy</a></li>
+        <li><a href="#">Returns</a></li>
+        <li><a href="#">Shipping Info</a></li>
         <li><a href="#">FAQs</a></li>
-        <li><a href="#">Care Instructions</a></li>
       </ul>
     </div>
-    <div>
-      <div class="footer-heading">Contact</div>
-      <ul class="footer-links">
-        <li><a href="#">📱 DM on Instagram</a></li>
-        <li><a href="#">📧 <span class="__cf_email__" data-cfemail="ef878a838380af9c80838a9b809c9b96838ac18681">[email&#160;protected]</span></a></li>
+    <div class="f-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="https://www.instagram.com/soletostylee" target="_blank">📷 @soletostylee</a></li>
+        <li><a href="#">📧 hello@soletostyle.in</a></li>
         <li><a href="#">📞 +91 98765 43210</a></li>
-        <li style="color:var(--muted);font-size:.73rem;margin-top:10px">Mon–Sat: 10AM – 7PM</li>
       </ul>
     </div>
   </div>
-  <div class="footer-bottom">
-    <p class="footer-copy">© 2025 SoleToStyle. All rights reserved. Made with ♡ in India.</p>
-    <div class="payment-icons">
-      <span class="pay-icon">UPI</span><span class="pay-icon">Visa</span><span class="pay-icon">MC</span><span class="pay-icon">COD</span>
-    </div>
+  <div class="f-bottom">
+    <p class="f-copy">© 2026 SoleToStyle. All rights reserved. Made with ♡ in India.</p>
+    <div class="f-pays"><span class="f-pay">UPI</span><span class="f-pay">Visa</span><span class="f-pay">MC</span><span class="f-pay">COD</span></div>
   </div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// CURSOR
-const cursor=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
-document.addEventListener('mousemove',e=>{
-  cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px';
-  setTimeout(()=>{ ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px'; },75);
-});
-
-// PRODUCTS
-const products=[
-  {id:1, name:'Midnight Flare Jean',      type:'Bellbottom Jeans', price:1799,oldPrice:2499,img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4c7a?w=600&q=80',badge:'new', cat:'bellbottom',sizes:['28','30','32','34','36'],colors:['#1a1a2e','#2d1b4e','#0d2137'],rating:'★★★★★'},
-  {id:2, name:'Retro Raw Bellbottom',     type:'Bellbottom Jeans', price:1599,oldPrice:2199,img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80',badge:'hot', cat:'bellbottom',sizes:['28','30','32','34'],      colors:['#3d2b10','#8b7355','#1a1a1a'],rating:'★★★★☆'},
-  {id:3, name:'Ivory Wide Flare',         type:'Bellbottom Jeans', price:1699,oldPrice:null, img:'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600&q=80',badge:'new', cat:'bellbottom',sizes:['28','30','32','34','36'],colors:['#f5f0e8','#e8ddd0','#0a0a0a'],rating:'★★★★★'},
-  {id:4, name:'Urban Cargo Baggy',        type:'Baggy Pants',      price:1499,oldPrice:1999,img:'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',badge:'sale',cat:'baggy',     sizes:['S','M','L','XL','XXL'],  colors:['#2d2d2d','#8b7355','#1f3d1f'],rating:'★★★★☆'},
-  {id:5, name:'Cloud Linen Baggy',        type:'Baggy Pants',      price:1399,oldPrice:null, img:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',badge:'new', cat:'baggy',     sizes:['S','M','L','XL'],        colors:['#f5f0e8','#d4c5b0','#c9a84c'],rating:'★★★★★'},
-  {id:6, name:'Black Label Formal Trouser',type:'Formal Baggy',    price:2299,oldPrice:3199,img:'https://images.unsplash.com/photo-1594938374182-a57369b08e9e?w=600&q=80',badge:'sale',cat:'formal',    sizes:['28','30','32','34','36'],colors:['#0a0a0a','#1a1a2e','#3d2b00'],rating:'★★★★★'},
-  {id:7, name:'Charcoal Drape Pant',      type:'Formal Baggy',     price:2499,oldPrice:null, img:'https://images.unsplash.com/photo-1547257965-b8eaa24e5c9a?w=600&q=80',badge:'new', cat:'formal',    sizes:['28','30','32','34'],      colors:['#3a3a3a','#5c5c5c','#c9a84c'],rating:'★★★★★'},
-  {id:8, name:'Essential Oversized Tee',  type:'T-Shirt',          price:699, oldPrice:999, img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',badge:'sale',cat:'tshirt',    sizes:['S','M','L','XL','XXL'],  colors:['#ffffff','#1a1a1a','#c9a84c'],rating:'★★★★☆'},
-  {id:9, name:'Acid Wash Graphic Tee',    type:'T-Shirt',          price:899, oldPrice:null, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80',badge:'hot', cat:'tshirt',    sizes:['S','M','L','XL'],        colors:['#8b7355','#1a1a2e','#2d1b00'],rating:'★★★★★'},
-  {id:10,name:'Linen Striped Shirt',      type:'Premium Shirt',    price:1999,oldPrice:2699,img:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80',badge:'sale',cat:'shirt',     sizes:['S','M','L','XL','XXL'],  colors:['#f5f0e8','#c9a84c','#0a0a0a'],rating:'★★★★★'},
-  {id:11,name:'Cuban Collar Premium',     type:'Premium Shirt',    price:1799,oldPrice:null, img:'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=80',badge:'new', cat:'shirt',     sizes:['S','M','L','XL'],        colors:['#0a0a0a','#1a1f3d','#3d1f00'],rating:'★★★★★'},
-  {id:12,name:'Oxford Business Shirt',    type:'Premium Shirt',    price:2199,oldPrice:2999,img:'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=600&q=80',badge:'hot', cat:'shirt',     sizes:['S','M','L','XL','XXL'],  colors:['#ffffff','#c9a84c','#1a1a1a'],rating:'★★★★☆'},
-];
+<script>
+const DB = {
+  flash:[
+    {id:1, name:'Midnight Flare Bellbottom',    cat:'Bellbottom', price:1299,old:1999,img:'Bellbotom_no_1.jpg',     badge:'sale',off:'35%',sizes:['28','30','32','34','36'],stars:'★★★★★',sold:'2.3k'},
+    {id:2, name:'Vintage Side-Stripe Flare',     cat:'Bellbottom', price:1499,old:2299,img:'bellbotom_no_2.jpg',    badge:'hot', off:'35%',sizes:['28','30','32','34'],     stars:'★★★★☆',sold:'1.8k'},
+    {id:3, name:'Urban Street Baggy Jean',       cat:'Baggy Jeans',price:1099,old:1799,img:'baggy_jeans_no_1.jpg', badge:'sale',off:'39%',sizes:['S','M','L','XL'],       stars:'★★★★★',sold:'3.1k'},
+    {id:4, name:'Acid Wash Oversized Tee',       cat:'T-Shirt',    price:599, old:999, img:'t_shirts.jpg',          badge:'sale',off:'40%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'5.2k'},
+    {id:5, name:'3-Colour Washed Tee Pack',      cat:'T-Shirt',    price:999, old:1599,img:'Shirts_no_1.jpg',       badge:'hot', off:'38%',sizes:['S','M','L','XL','XXL'],stars:'★★★★★',sold:'4.7k'},
+  ],
+  bell:[
+    {id:6, name:'Midnight Flare Bellbottom',    cat:'Bellbottom', price:1799,old:2499,img:'Bellbotom_no_1.jpg',    badge:'new', off:'28%',sizes:['28','30','32','34','36'],stars:'★★★★★',sold:'2.3k'},
+    {id:7, name:'Vintage Side-Stripe Flare',    cat:'Bellbottom', price:1599,old:2199,img:'bellbotom_no_2.jpg',    badge:'hot', off:'27%',sizes:['28','30','32','34'],     stars:'★★★★☆',sold:'1.8k'},
+    {id:8, name:'Classic Black Wide Leg',       cat:'Bellbottom', price:1699,old:null, img:'bellbotom_no_3.jpg',   badge:'new', off:null, sizes:['28','30','32','34','36'],stars:'★★★★★',sold:'980'},
+    {id:9, name:'Light Wash Retro Bellbottom',  cat:'Bellbottom', price:1899,old:2699,img:'bellbotom_no_4.jpg',    badge:'sale',off:'30%',sizes:['28','30','32'],          stars:'★★★★☆',sold:'760'},
+  ],
+  baggy:[
+    {id:10,name:'Street Style Baggy Jean',      cat:'Baggy Jeans',price:1499,old:1999,img:'baggy_jeans_no_1.jpg', badge:'hot', off:'25%',sizes:['S','M','L','XL'],       stars:'★★★★★',sold:'3.1k'},
+    {id:11,name:'Heavy Stitch Baggy Denim',     cat:'Baggy Jeans',price:1699,old:2299,img:'baggy_jeans_no_2.jpg', badge:'new', off:'26%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'1.4k'},
+    {id:12,name:'Vintage Wash Super Baggy',     cat:'Baggy Jeans',price:1399,old:null, img:'baggy_jeans_no_1.jpg',badge:'new', off:null, sizes:['28','30','32','34'],     stars:'★★★★★',sold:'890'},
+    {id:13,name:'Panelled Cargo Baggy Jean',    cat:'Baggy Jeans',price:1899,old:2599,img:'baggy_jeans_no_2.jpg', badge:'sale',off:'27%',sizes:['S','M','L','XL'],       stars:'★★★★☆',sold:'620'},
+  ],
+  tshirt:[
+    {id:14,name:'Acid Washed Oversized Tee',    cat:'T-Shirt',    price:699, old:999, img:'t_shirts.jpg',          badge:'sale',off:'30%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'5.2k'},
+    {id:15,name:'3-Pack Washed Tee Set',        cat:'T-Shirt',    price:1299,old:1999,img:'Shirts_no_1.jpg',       badge:'hot', off:'35%',sizes:['S','M','L','XL','XXL'],stars:'★★★★★',sold:'4.7k'},
+    {id:16,name:'Stone Wash Drop Shoulder Tee', cat:'T-Shirt',    price:799, old:null, img:'t_shirts.jpg',          badge:'new', off:null, sizes:['S','M','L','XL'],      stars:'★★★★★',sold:'2.1k'},
+    {id:17,name:'Blue Denim Wash Tee',          cat:'T-Shirt',    price:749, old:1099,img:'Shirts_no_1.jpg',       badge:'sale',off:'32%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'1.9k'},
+  ],
+  shirt:[
+    {id:18,name:'Premium Linen Striped Shirt',  cat:'Shirt',      price:1999,old:2699,img:'Shirts_no_1.jpg',       badge:'sale',off:'26%',sizes:['S','M','L','XL','XXL'],stars:'★★★★★',sold:'1.2k'},
+    {id:19,name:'Acid Wash Cuban Collar Shirt', cat:'Shirt',      price:1799,old:null, img:'t_shirts.jpg',          badge:'new', off:null, sizes:['S','M','L','XL'],      stars:'★★★★★',sold:'980'},
+    {id:20,name:'Dark Wash Oversized Shirt',    cat:'Shirt',      price:1699,old:2199,img:'Shirts_no_1.jpg',       badge:'hot', off:'23%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'760'},
+    {id:21,name:'Multi-Tone Washed Shirt',      cat:'Shirt',      price:1599,old:2099,img:'t_shirts.jpg',          badge:'sale',off:'24%',sizes:['S','M','L','XL'],      stars:'★★★★★',sold:'540'},
+  ],
+};
 
 let cart=[];
 
-function renderProducts(filter){
-  const grid=document.getElementById('productGrid');
-  const list=filter==='all'?products:filter==='sale'?products.filter(p=>p.badge==='sale'):products.filter(p=>p.cat===filter);
-  grid.innerHTML=list.map(p=>`
-    <div class="product-card">
-      <div class="product-img">
-        <div class="product-img-inner" style="padding:0;align-items:stretch">
-          <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0" onerror="this.style.display='none'">
-        </div>
-        <div class="product-overlay"><button class="overlay-btn" onclick="addToCart(${p.id})">+ Add to Bag</button></div>
-        <button class="wishlist-btn">♡</button>
-        <span class="product-badge badge-${p.badge}">${p.badge==='new'?'New':p.badge==='hot'?'🔥 Hot':'Sale'}</span>
-      </div>
-      <div class="product-name">${p.name}</div>
-      <div class="product-type">${p.type}</div>
-      <div class="product-price">
-        <span class="price">₹${p.price.toLocaleString()}</span>
-        ${p.oldPrice?`<span class="price-old">₹${p.oldPrice.toLocaleString()}</span>`:''}
-      </div>
-      <div class="stars">${p.rating}</div>
-      <div class="color-dots">${p.colors.map(c=>`<div class="cdot" style="background:${c}"></div>`).join('')}</div>
-      <div class="size-selector">${p.sizes.slice(0,5).map(s=>`<span class="size-chip">${s}</span>`).join('')}</div>
+function makeCard(p){
+  return `<div class="pc">
+    <div class="pc-img">
+      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      <div class="pc-bdg"><span class="bdg bdg-${p.badge==='sale'?'sale':p.badge==='hot'?'hot':'new'}">${p.badge==='sale'?'SALE':p.badge==='hot'?'🔥 HOT':'NEW'}</span></div>
+      <button class="pc-wish" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</button>
+      <div class="pc-hover"><button class="atc" onclick="addCart(${p.id})">+ Add to Bag</button></div>
     </div>
-  `).join('');
+    <div class="pc-info">
+      <div class="pc-name">${p.name}</div>
+      <div class="pc-price">
+        <span class="p-now">₹${p.price.toLocaleString()}</span>
+        ${p.old?`<span class="p-was">₹${p.old.toLocaleString()}</span>`:''}
+        ${p.off?`<span class="p-pct">-${p.off}</span>`:''}
+      </div>
+      <div class="pc-meta">${p.stars} <span style="color:#bbb">(${p.sold} sold)</span></div>
+      <div class="pc-sizes">${p.sizes.slice(0,5).map(s=>`<span class="sz">${s}</span>`).join('')}</div>
+    </div>
+  </div>`;
 }
 
-function setFilter(btn,filter){
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderProducts(filter);
-}
+function render(id,arr){ document.getElementById(id).innerHTML=arr.map(makeCard).join(''); }
 
-function addToCart(id){
-  const p=products.find(x=>x.id===id);
+function addCart(id){
+  const all=[...DB.flash,...DB.bell,...DB.baggy,...DB.tshirt,...DB.shirt];
+  const p=all.find(x=>x.id===id);
   const ex=cart.find(x=>x.id===id);
-  if(ex)ex.qty++;else cart.push({...p,qty:1});
-  updateCartUI();
-  showToast(`${p.name} added! 🛍️`);
+  if(ex) ex.qty++; else cart.push({...p,qty:1});
+  updateCart();
+  showToast(`✓ ${p.name} added to bag!`);
 }
 
-function updateCartUI(){
-  const count=cart.reduce((a,x)=>a+x.qty,0);
-  document.getElementById('cartCount').textContent=count;
-  const itemsEl=document.getElementById('cartItems');
-  const totalEl=document.getElementById('cartTotal');
-  const checkoutBtn=document.getElementById('checkoutBtn');
-  const emptyCart=document.getElementById('emptyCart');
-  if(!cart.length){itemsEl.innerHTML='';totalEl.style.display='none';checkoutBtn.style.display='none';emptyCart.style.display='block';return;}
-  emptyCart.style.display='none';totalEl.style.display='flex';checkoutBtn.style.display='block';
-  const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
-  document.getElementById('totalPrice').textContent=`₹${total.toLocaleString()}`;
-  itemsEl.innerHTML=cart.map(item=>`
-    <div class="cart-item">
-      <div class="cart-item-img"><img src="${item.img}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.textContent='🧥'"></div>
-      <div><div class="cart-item-name">${item.name}</div><div class="cart-item-size">Qty: ${item.qty}</div></div>
-      <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString()}</div>
-    </div>
-  `).join('');
+function removeCart(id){
+  cart=cart.filter(x=>x.id!==id);
+  updateCart();
 }
 
-function toggleCart(){
-  document.getElementById('cartDrawer').classList.toggle('open');
-  document.getElementById('overlay').classList.toggle('open');
+function updateCart(){
+  const total=cart.reduce((a,x)=>a+x.qty,0);
+  document.getElementById('cartBadge').textContent=total;
+  document.getElementById('cartCountHead').textContent=total;
+  if(!cart.length){
+    document.getElementById('cartBody').innerHTML='<div class="c-empty">🛍️<br><br>Your bag is empty</div>';
+    document.getElementById('cartFoot').style.display='none';
+    return;
+  }
+  document.getElementById('cartFoot').style.display='block';
+  const sum=cart.reduce((a,x)=>a+x.price*x.qty,0);
+  document.getElementById('cartTotalVal').textContent=`₹${sum.toLocaleString()}`;
+  document.getElementById('cartBody').innerHTML=cart.map(item=>`
+    <div class="ci">
+      <div class="ci-img"><img src="${item.img}" alt="${item.name}"></div>
+      <div>
+        <div class="ci-name">${item.name}</div>
+        <div class="ci-sub">${item.cat} · Qty: ${item.qty}</div>
+        <div class="ci-price">₹${(item.price*item.qty).toLocaleString()}</div>
+      </div>
+      <button class="ci-del" onclick="removeCart(${item.id})">🗑</button>
+    </div>`).join('');
 }
 
-function showToast(msg){
-  cons
+window.toggleCart=function(){ document.getElementById('cartDrawer').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); };
+window.addCart=addCart;
+window.removeCart=removeCart;
+
+function showToast(msg){ const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2500); }
+
+function startTimer(){ let h=1,m=59,s=59; setInterval(()=>{ s--; if(s<0){s=59;m--;} if(m<0){m=59;h--;} if(h<0){h=1;m=59;s=59;} document.getElementById('cdH').textContent=String(h).padStart(2,'0'); document.getElementById('cdM').textContent=String(m).padStart(2,'0'); document.getElementById('cdS').textContent=String(s).padStart(2,'0'); },1000); }
+
+// INIT
+render('flashGrid', DB.flash);
+render('bellGrid',  DB.bell);
+render('baggyGrid', DB.baggy);
+render('tshirtGrid',DB.tshirt);
+render('shirtGrid', DB.shirt);
+updateCart();
+startTimer();
+</script>
+</body>
+</html>
