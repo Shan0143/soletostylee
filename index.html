@@ -630,7 +630,7 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
       <div class="hero-sub">New Collection — SS 2025</div>
       <div class="hero-h1">Dress to<br><em>Dominate</em></div>
       <p class="hero-p">Bellbottoms. Baggys. Premium Shirts. Style that speaks before you do.</p>
-      <button class="btn-hero" onclick="document.getElementById('flashSale').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
+      <button class="btn-hero" onclick="document.getElementById('bellbottom').scrollIntoView({behavior:'smooth'})">Shop Now →</button>
     </div>
   </div>
   <div class="hero-right">
@@ -651,18 +651,6 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
     <div class="cat-item"><div class="cat-circle">🏷️</div><span class="cat-lbl">Under ₹999</span></div>
   </div>
 </div>
-
-<!-- FLASH SALE -->
-<div class="sec-wrap" id="flashSale">
-  <div class="sec-head">
-    <h2>⚡ Flash Sale</h2>
-    <span class="pill pill-red">LIMITED STOCK</span>
-    <div class="countdown"><div class="cd" id="cdH">01</div><span class="cddot">:</span><div class="cd" id="cdM">59</div><span class="cddot">:</span><div class="cd" id="cdS">59</div></div>
-    <button class="view-all">View All →</button>
-  </div>
-  <div class="pgrid" id="flashGrid"></div>
-</div>
-
 <!-- PROMO ROW -->
 <div class="promo-row">
   <div class="promo p1"><div class="promo-text"><h4>Bellbottom<br>Collection</h4><p>70s vibes, 2025 fit</p><button class="promo-btn" onclick="document.getElementById('bellbottom').scrollIntoView({behavior:'smooth'})">Shop Now</button></div><span class="promo-ico">👖</span></div>
@@ -740,13 +728,6 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
 // PRODUCTS DATABASE
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━
 const DB = {
-  flash: [
-    {id:1, name:'Midnight Flare Bellbottom', cat:'Bellbottom', price:1299, old:1999, img:'Bellbotom_no_1.jpg',  badge:'sale', off:'35%', sizes:['28','30','32','34','36'], stars:'★★★★★', sold:'2.3k', colors:['#1a1a2e','#3d2b10']},
-    {id:2, name:'Light Wash Baggy Jean',       cat:'Baggy',      price:1099, old:1799, img:'baggy-1.jpg',         badge:'hot',  off:'39%', sizes:['28','30','32','34'],      stars:'★★★★★', sold:'3.1k', colors:['#5a8abf','#2a5a8f']},
-    {id:3, name:'Polo Ribbed Knit Tee',      cat:'T-Shirt',    price:799,  old:1299, img:'tshirt-1.jpg',        badge:'new',  off:'38%', sizes:['S','M','L','XL','XXL'],   stars:'★★★★★', sold:'3.2k', colors:['#1a4a2e','#1a1a2e']},
-    {id:4, name:'Colourblock Premium Shirt', cat:'Shirt',      price:1499, old:2199, img:'shirt-1.jpg',         badge:'sale', off:'32%', sizes:['S','M','L','XL','XXL'],   stars:'★★★★★', sold:'1.4k', colors:['#7a1a1a','#f5f0e8']},
-    {id:5, name:'Classic Black Wide Leg',    cat:'Bellbottom', price:1499, old:2099, img:'bellbotom_no_3.jpg',  badge:'hot',  off:'29%', sizes:['28','30','32','34','36'], stars:'★★★★★', sold:'980',  colors:['#0a0a0a','#3a3a3a']},
-  ],
   bell: [
     {id:6,  name:'Midnight Flare Bellbottom',   cat:'Bellbottom', price:1799, old:2499, img:'Bellbotom_no_1.jpg', badge:'new',  off:'28%', sizes:['28','30','32','34','36'], stars:'★★★★★', sold:'2.3k', colors:['#1a1a2e','#2d1b4e']},
     {id:7,  name:'Vintage Side-Stripe Flare',   cat:'Bellbottom', price:1599, old:2199, img:'bellbotom_no_2.jpg', badge:'hot',  off:'27%', sizes:['28','30','32','34'],      stars:'★★★★☆', sold:'1.8k', colors:['#2d2d2d','#8b7355']},
@@ -775,7 +756,7 @@ const WA = '919876543210';
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━
 // HELPERS
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━
-function allProducts(){ return [...DB.flash,...DB.bell,...DB.baggy,...DB.tshirt,...DB.shirt]; }
+function allProducts(){ return [...DB.bell,...DB.baggy,...DB.tshirt,...DB.shirt]; }
 function getById(id){ return allProducts().find(p=>p.id===id); }
 
 function showToast(msg){
@@ -1025,7 +1006,7 @@ function addProduct(){
 function deleteProduct(id){
   if(!confirm('Delete this product?')) return;
   ['flash','bell','baggy','tshirt','shirt'].forEach(k=>{ DB[k]=DB[k].filter(x=>x.id!==id); });
-  render('flashGrid',DB.flash); render('bellGrid',DB.bell); render('baggyGrid',DB.baggy); render('tshirtGrid',DB.tshirt); render('shirtGrid',DB.shirt);
+  render('bellGrid',DB.bell); render('baggyGrid',DB.baggy); render('tshirtGrid',DB.tshirt); render('shirtGrid',DB.shirt);
   renderAdminProducts();
   showToast('Product deleted!');
 }
@@ -1235,7 +1216,6 @@ window.showToast=showToast;
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━
 // INIT
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━
-render('flashGrid', DB.flash);
 render('bellGrid',  DB.bell);
 render('baggyGrid', DB.baggy);
 render('tshirtGrid',DB.tshirt);
