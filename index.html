@@ -40,7 +40,7 @@ nav::-webkit-scrollbar{display:none}
 
 /* HERO */
 .hero-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:3px;height:440px;padding:10px 40px;background:#f5f5f5}
-.hero-main{background:linear-gradient(135deg,#0f0f0f,#1a1a2e,#0a0a0a);border-radius:6px;display:flex;align-items:center;padding:48px;position:relative;overflow:hidden}
+.hero-main{background:linear-gradient(135deg,#0f0f0f,#1a1a2e,#0a0a0a);border-radius:6px;display:flex;align-items:flex-start;padding:36px 48px;position:relative;overflow:hidden}
 .hero-main::after{content:'SALE UP TO 40% OFF';position:absolute;top:18px;right:18px;background:#ff3c3c;color:#fff;padding:5px 14px;font-size:.62rem;font-weight:700;letter-spacing:1.5px;border-radius:2px}
 .hero-sub{font-size:.68rem;letter-spacing:3px;text-transform:uppercase;color:#ff6b35;margin-bottom:14px;font-weight:600}
 .hero-h1{font-size:2.8rem;font-weight:800;color:#fff;line-height:1.05;margin-bottom:14px}
@@ -59,8 +59,8 @@ nav::-webkit-scrollbar{display:none}
 .cat-items{display:flex;justify-content:space-around}
 .cat-item{display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;padding:10px 14px;border-radius:6px;transition:all .2s}
 .cat-item:hover{background:#fff5f2}
-.cat-circle{width:60px;height:60px;border-radius:50%;border:2px solid #eee;display:flex;align-items:center;justify-content:center;font-size:1.6rem;background:#fafafa;transition:border-color .2s}
-.cat-item:hover .cat-circle{border-color:#ff6b35}
+.cat-circle{width:60px;height:60px;border-radius:50%;border:2px solid #eee;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:800;letter-spacing:.5px;color:#444;background:#fafafa;transition:border-color .2s}
+.cat-item:hover .cat-circle{border-color:#ff6b35;color:#ff6b35}
 .cat-lbl{font-size:.65rem;font-weight:600;color:#444;text-align:center}
 
 /* SECTION */
@@ -642,20 +642,20 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
 <!-- CATEGORY STRIP -->
 <div class="cat-strip">
   <div class="cat-items">
-    <div class="cat-item" onclick="location.href='#bellbottom'"><div class="cat-circle">👖</div><span class="cat-lbl">Bellbottoms</span></div>
-    <div class="cat-item" onclick="location.href='#baggy'"><div class="cat-circle">🩳</div><span class="cat-lbl">Baggy Jeans</span></div>
-    <div class="cat-item" onclick="location.href='#tshirts'"><div class="cat-circle">👕</div><span class="cat-lbl">T-Shirts</span></div>
-    <div class="cat-item" onclick="location.href='#shirts'"><div class="cat-circle">🧥</div><span class="cat-lbl">Shirts</span></div>
-    <div class="cat-item"><div class="cat-circle">🎁</div><span class="cat-lbl">Combos</span></div>
-    <div class="cat-item" onclick="openPage('faq');return false"><div class="cat-circle">❓</div><span class="cat-lbl">FAQs</span></div>
-    <div class="cat-item"><div class="cat-circle">🏷️</div><span class="cat-lbl">Under ₹999</span></div>
+    <div class="cat-item" onclick="location.href='#bellbottom'"><div class="cat-circle">BL</div><span class="cat-lbl">Bellbottoms</span></div>
+    <div class="cat-item" onclick="location.href='#baggy'"><div class="cat-circle">BG</div><span class="cat-lbl">Baggy Jeans</span></div>
+    <div class="cat-item" onclick="location.href='#tshirts'"><div class="cat-circle">TS</div><span class="cat-lbl">T-Shirts</span></div>
+    <div class="cat-item" onclick="location.href='#shirts'"><div class="cat-circle">SH</div><span class="cat-lbl">Shirts</span></div>
+    <div class="cat-item"><div class="cat-circle">CB</div><span class="cat-lbl">Combos</span></div>
+    <div class="cat-item" onclick="openPage('faq');return false"><div class="cat-circle">FAQ</div><span class="cat-lbl">FAQs</span></div>
+    <div class="cat-item"><div class="cat-circle">₹</div><span class="cat-lbl">Under ₹999</span></div>
   </div>
 </div>
 <!-- PROMO ROW -->
 <div class="promo-row">
-  <div class="promo p1"><div class="promo-text"><h4>Bellbottom<br>Collection</h4><p>70s vibes, 2025 fit</p><button class="promo-btn" onclick="document.getElementById('bellbottom').scrollIntoView({behavior:'smooth'})">Shop Now</button></div><span class="promo-ico">👖</span></div>
-  <div class="promo p2"><div class="promo-text"><h4>Baggy Jeans<br>Drop</h4><p>Street style essentials</p><button class="promo-btn" onclick="document.getElementById('baggy').scrollIntoView({behavior:'smooth'})">Shop Now</button></div><span class="promo-ico">🩳</span></div>
-  <div class="promo p3"><div class="promo-text"><h4>Premium<br>Shirts</h4><p>Dress to impress</p><button class="promo-btn" onclick="document.getElementById('shirts').scrollIntoView({behavior:'smooth'})">Shop Now</button></div><span class="promo-ico">🧥</span></div>
+  <div class="promo p1"><div class="promo-text"><h4>Bellbottom<br>Collection</h4><p>70s vibes, 2025 fit</p><button class="promo-btn" onclick="document.getElementById('bellbottom').scrollIntoView({behavior:'smooth'})">Shop Now</button></div></div>
+  <div class="promo p2"><div class="promo-text"><h4>Baggy Jeans<br>Drop</h4><p>Street style essentials</p><button class="promo-btn" onclick="document.getElementById('baggy').scrollIntoView({behavior:'smooth'})">Shop Now</button></div></div>
+  <div class="promo p3"><div class="promo-text"><h4>Premium<br>Shirts</h4><p>Dress to impress</p><button class="promo-btn" onclick="document.getElementById('shirts').scrollIntoView({behavior:'smooth'})">Shop Now</button></div></div>
 </div>
 
 <!-- BELLBOTTOMS -->
