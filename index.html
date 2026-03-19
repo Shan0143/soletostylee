@@ -352,7 +352,20 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
   .stats-grid{grid-template-columns:repeat(2,1fr)}
   .a-form-grid{grid-template-columns:1fr}
 }
-/* ── INFO PAGES ── */
+/* ── WISHLIST DRAWER ── */
+.wish-drawer{position:fixed;top:0;right:-480px;width:480px;height:100vh;background:#fff;z-index:2001;transition:right .35s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 30px rgba(0,0,0,.14);display:flex;flex-direction:column}
+.wish-drawer.open{right:0}
+.wish-empty{text-align:center;padding:60px 20px;color:#bbb;font-size:.88rem}
+.wish-item{display:grid;grid-template-columns:80px 1fr auto;gap:14px;align-items:center;padding:13px 0;border-bottom:1px solid #f5f5f5}
+.wish-item img{width:80px;height:96px;object-fit:cover;display:block;border-radius:3px}
+.wi-name{font-size:.82rem;font-weight:600;margin-bottom:4px}
+.wi-cat{font-size:.7rem;color:#aaa;margin-bottom:6px}
+.wi-price{font-size:.88rem;font-weight:700;color:#ff3c3c;margin-bottom:8px}
+.wi-atc{padding:7px 14px;background:#111;color:#fff;border:none;font-size:.68rem;font-weight:700;cursor:pointer;border-radius:3px;font-family:'Inter',sans-serif;letter-spacing:1px;transition:background .2s}
+.wi-atc:hover{background:#ff6b35}
+.wi-del{background:none;border:none;color:#ccc;cursor:pointer;font-size:1rem;transition:color .2s;padding:4px}
+.wi-del:hover{color:#ff3c3c}
+.wish-count-badge{position:absolute;top:2px;right:4px;background:#ff3c3c;color:#fff;font-size:.55rem;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700}
 .info-panel{position:fixed;inset:0;background:#fff;z-index:6000;display:none;flex-direction:column;overflow:hidden}
 .info-panel.open{display:flex}
 .info-nav{background:#111;padding:14px 28px;display:flex;align-items:center;gap:16px;flex-shrink:0}
@@ -406,13 +419,22 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
 <body>
 
 <!-- OVERLAYS -->
-<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<div class="overlay" id="overlay" onclick="closeAllDrawers()"></div>
 <div class="toast" id="toast"></div>
 
 <!-- WHATSAPP FLOAT -->
 <div class="wa-float">
   <div class="wa-tooltip">Order on WhatsApp!</div>
   <button class="wa-bubble" onclick="waChat()" title="Order on WhatsApp">💬</button>
+</div>
+
+<!-- WISHLIST DRAWER -->
+<div class="wish-drawer" id="wishDrawer">
+  <div class="c-head">
+    <h3>🤍 Wishlist (<span id="wishCountHead">0</span>)</h3>
+    <button class="c-close" onclick="toggleWishDrawer()">✕</button>
+  </div>
+  <div class="c-body" id="wishBody"><div class="wish-empty">🤍<br><br>Your wishlist is empty!<br><small>Click 🤍 on any product to save it</small></div></div>
 </div>
 
 <!-- CART DRAWER -->
@@ -646,7 +668,7 @@ footer{background:#111;color:#888;padding:48px 40px 24px;margin-top:12px}
     </div>
     <div class="h-actions">
       <button class="hbtn" onclick="openAdminOverlay()" title="Admin Panel"><span class="ico">⚙️</span>Admin</button>
-      <button class="hbtn"><span class="ico">🤍</span>Wishlist</button>
+      <button class="hbtn" onclick="toggleWishDrawer()" style="position:relative"><span class="ico">🤍</span>Wishlist<span class="hbadge" id="wishBadge" style="display:none">0</span></button>
       <button class="hbtn" onclick="toggleCart()"><span class="ico">🛍️</span>Bag<span class="hbadge" id="cartBadge">0</span></button>
     </div>
   </div>
@@ -782,16 +804,14 @@ let DB = {
     {id:13,name:'Panelled Cargo Baggy Jean',   cat:'Baggy',      price:1899,old:2599,img:'baggy_jeans_no_2.jpg', badge:'sale',off:'27%',sizes:['S','M','L','XL'],       stars:'★★★★☆',sold:'620',colors:['#1a1a1a','#2d2d2d']},
   ],
   tshirt:[
-    {id:14,name:'Acid Washed Oversized Tee',   cat:'T-Shirt',    price:699, old:999, img:'t_shirts.jpg',         badge:'sale',off:'30%',sizes:['S','M','L','XL','XXL'], stars:'★★★★☆',sold:'5.2k',colors:['#111','#555']},
-    {id:15,name:'3-Pack Washed Tee Set',       cat:'T-Shirt',    price:1299,old:1999,img:'Shirts_no_1.jpg',      badge:'hot', off:'35%',sizes:['S','M','L','XL','XXL'], stars:'★★★★★',sold:'4.7k',colors:['#111','#3a3a5c','#3a5c4a']},
-    {id:16,name:'Stone Wash Drop Shoulder Tee',cat:'T-Shirt',    price:799, old:null, img:'t_shirts.jpg',        badge:'new', off:null, sizes:['S','M','L','XL'],        stars:'★★★★★',sold:'2.1k',colors:['#555','#888']},
-    {id:17,name:'Blue Denim Wash Tee',         cat:'T-Shirt',    price:749, old:1099,img:'Shirts_no_1.jpg',      badge:'sale',off:'32%',sizes:['S','M','L','XL','XXL'], stars:'★★★★☆',sold:'1.9k',colors:['#3a5c7a','#1a3a5c']},
+    {id:14,name:'Polo Ribbed Knit Tee',         cat:'T-Shirt',price:899,old:1399,img:'tshirt-1.jpg',badge:'new',off:'36%',sizes:['S','M','L','XL','XXL'],stars:'★★★★★',sold:'3.2k',colors:['#1a4a2e','#1a1a2e','#8b3a3a']},
+    {id:15,name:'Sky Blue Acid Wash Oversized',  cat:'T-Shirt',price:699,old:999, img:'tshirt-2.jpg',badge:'hot',off:'30%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'5.1k',colors:['#4a8abf','#2a5a8f','#111']},
+    {id:16,name:'Striped Patch Tee — 4 Colours', cat:'T-Shirt',price:849,old:1199,img:'tshirt-3.jpg',badge:'sale',off:'29%',sizes:['S','M','L','XL'],      stars:'★★★★★',sold:'2.8k',colors:['#f5f0e8','#1a4a2e','#3d2010','#1a1a2e']},
   ],
   shirt:[
-    {id:18,name:'Premium Linen Striped Shirt', cat:'Shirt',      price:1999,old:2699,img:'Shirts_no_1.jpg',      badge:'sale',off:'26%',sizes:['S','M','L','XL','XXL'], stars:'★★★★★',sold:'1.2k',colors:['#f5f0e8','#c9a84c']},
-    {id:19,name:'Acid Wash Cuban Shirt',       cat:'Shirt',      price:1799,old:null, img:'t_shirts.jpg',        badge:'new', off:null, sizes:['S','M','L','XL'],        stars:'★★★★★',sold:'980',colors:['#111','#333']},
-    {id:20,name:'Dark Wash Oversized Shirt',   cat:'Shirt',      price:1699,old:2199,img:'Shirts_no_1.jpg',      badge:'hot', off:'23%',sizes:['S','M','L','XL','XXL'], stars:'★★★★☆',sold:'760',colors:['#222','#3d3d3d']},
-    {id:21,name:'Multi-Tone Washed Shirt',     cat:'Shirt',      price:1599,old:2099,img:'t_shirts.jpg',         badge:'sale',off:'24%',sizes:['S','M','L','XL'],        stars:'★★★★★',sold:'540',colors:['#3a5c7a','#5c7a3a']},
+    {id:18,name:'Colourblock Stripe Premium Shirt',cat:'Shirt',price:1799,old:2499,img:'shirt-1.jpg',badge:'new', off:'28%',sizes:['S','M','L','XL','XXL'],stars:'★★★★★',sold:'1.4k',colors:['#7a1a1a','#f5f0e8']},
+    {id:19,name:'Two-Tone Corduroy Shirt',          cat:'Shirt',price:1999,old:2799,img:'shirt-2.jpg',badge:'hot', off:'29%',sizes:['S','M','L','XL'],      stars:'★★★★★',sold:'980', colors:['#c9a870','#f5e8d0','#2d1a0a']},
+    {id:20,name:'Blue Plaid Flannel Shirt',          cat:'Shirt',price:1699,old:2299,img:'shirt-3.jpg',badge:'sale',off:'26%',sizes:['S','M','L','XL','XXL'],stars:'★★★★☆',sold:'760', colors:['#5a8abf','#c9a84c','#f5f0e8']},
   ],
 };
 
@@ -799,7 +819,7 @@ let cart = [];
 let currentProduct = null;
 let modalQty = 1;
 let selectedSize = null;
-const WA_NUMBER = '918218654504'; // Change this to your number
+const WA_NUMBER = '919876543210'; // Change this to your number
 
 // ═══════════════════════════════════════════
 // PRODUCT CARDS
@@ -809,7 +829,7 @@ function makeCard(p){
     <div class="pc-img">
       <img src="${p.img}" alt="${p.name}" loading="lazy">
       <div class="pc-bdg"><span class="bdg bdg-${p.badge==='sale'?'sale':p.badge==='hot'?'hot':'new'}">${p.badge==='sale'?'SALE':p.badge==='hot'?'🔥 HOT':'NEW'}</span></div>
-      <button class="pc-wish" onclick="event.stopPropagation();this.textContent=this.textContent==='🤍'?'❤️':'🤍'">🤍</button>
+      <button class="pc-wish" id="wish-${p.id}" onclick="event.stopPropagation();toggleWish(${p.id},this)">🤍</button>
       <div class="pc-hover-btns">
         <button class="atc" onclick="event.stopPropagation();addCart(${p.id})">+ Bag</button>
         <button class="qv" onclick="event.stopPropagation();openModal(${p.id})" title="Quick View">👁</button>
@@ -1051,7 +1071,16 @@ function renderAdminOrders(){
 // HELPERS
 // ═══════════════════════════════════════════
 function getAllProducts(){ return [...DB.flash,...DB.bell,...DB.baggy,...DB.tshirt,...DB.shirt]; }
-window.toggleCart=function(){ document.getElementById('cartDrawer').classList.toggle('open'); document.getElementById('overlay').classList.toggle('open'); };
+window.toggleCart=function(){
+  document.getElementById('wishDrawer').classList.remove('open');
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+};
+window.closeAllDrawers=function(){
+  document.getElementById('cartDrawer').classList.remove('open');
+  document.getElementById('wishDrawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+};
 window.addCart=addCart; window.openModal=openModal; window.removeCart=removeCart;
 window.adminLogin=adminLogin; window.deleteProduct=deleteProduct;
 
@@ -1153,6 +1182,74 @@ function trackOrder(){
   </div>`;
 }
 
+// ═══════════════════════════════════════════
+// WISHLIST
+// ═══════════════════════════════════════════
+let wishlist = [];
+
+function toggleWish(id, btn){
+  const all = getAllProducts();
+  const p = all.find(x=>x.id===id);
+  if(!p) return;
+  const idx = wishlist.findIndex(x=>x.id===id);
+  if(idx >= 0){
+    wishlist.splice(idx,1);
+    btn.textContent = '🤍';
+    btn.style.background = 'rgba(255,255,255,.92)';
+    showToast('Removed from wishlist');
+  } else {
+    wishlist.push(p);
+    btn.textContent = '❤️';
+    btn.style.background = '#ffeeee';
+    showToast(`❤️ ${p.name} added to wishlist!`);
+  }
+  updateWishUI();
+}
+
+function updateWishUI(){
+  const count = wishlist.length;
+  const badge = document.getElementById('wishBadge');
+  const headCount = document.getElementById('wishCountHead');
+  badge.textContent = count;
+  badge.style.display = count > 0 ? 'flex' : 'none';
+  if(headCount) headCount.textContent = count;
+
+  const body = document.getElementById('wishBody');
+  if(!count){
+    body.innerHTML = '<div class="wish-empty">🤍<br><br>Your wishlist is empty!<br><small>Click 🤍 on any product to save it</small></div>';
+    return;
+  }
+  body.innerHTML = wishlist.map(item=>`
+    <div class="wish-item">
+      <img src="${item.img}" alt="${item.name}" onerror="this.style.opacity='.3'">
+      <div>
+        <div class="wi-name">${item.name}</div>
+        <div class="wi-cat">${item.cat}</div>
+        <div class="wi-price">₹${item.price.toLocaleString()} ${item.old?`<span style="color:#bbb;text-decoration:line-through;font-size:.75rem">₹${item.old.toLocaleString()}</span>`:''}</div>
+        <button class="wi-atc" onclick="addCart(${item.id});removeWish(${item.id})">+ Move to Bag</button>
+      </div>
+      <button class="wi-del" onclick="removeWish(${item.id})">🗑</button>
+    </div>`).join('');
+}
+
+function removeWish(id){
+  wishlist = wishlist.filter(x=>x.id!==id);
+  // Reset heart button on card
+  const btn = document.getElementById('wish-'+id);
+  if(btn){ btn.textContent='🤍'; btn.style.background='rgba(255,255,255,.92)'; }
+  updateWishUI();
+}
+
+function toggleWishDrawer(){
+  document.getElementById('wishDrawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+
+window.toggleWish = toggleWish;
+window.removeWish = removeWish;
+window.toggleWishDrawer = toggleWishDrawer;
+
+// ═══════════════════════════════════════════
 window.openPage=openPage; window.closePage=closePage;
 window.toggleFAQ=toggleFAQ; window.trackOrder=trackOrder;
 </script>
