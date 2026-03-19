@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SoleToStyle — Walk With Intent</title>
+<title>SoleToStyle — Wear Your Identity</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,300;1,300;1,600&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -15,829 +15,236 @@
     --text: #1a1a1a;
     --muted: #888;
   }
-
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
+  body { background: var(--cream); color: var(--text); font-family: 'DM Sans', sans-serif; overflow-x: hidden; cursor: none; }
 
-  body {
-    background: var(--cream);
-    color: var(--text);
-    font-family: 'DM Sans', sans-serif;
-    overflow-x: hidden;
-  }
+  .cursor { width: 12px; height: 12px; background: var(--black); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: width .3s, height .3s; }
+  .cursor-ring { width: 40px; height: 40px; border: 1px solid var(--gold); border-radius: 50%; position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: left .08s, top .08s; }
 
-  /* ── CURSOR ── */
-  body { cursor: none; }
-  .cursor {
-    width: 12px; height: 12px;
-    background: var(--black);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9999;
-    transition: transform 0.15s ease, width 0.3s, height 0.3s, background 0.3s;
-    transform: translate(-50%, -50%);
-  }
-  .cursor-ring {
-    width: 40px; height: 40px;
-    border: 1px solid var(--gold);
-    border-radius: 50%;
-    position: fixed; top: 0; left: 0;
-    pointer-events: none;
-    z-index: 9998;
-    transform: translate(-50%, -50%);
-    transition: transform 0.4s ease, width 0.3s, height 0.3s, opacity 0.3s;
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; width: 100%; z-index: 1000;
-    padding: 20px 60px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: rgba(245,240,232,0.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid rgba(201,168,76,0.2);
-    transition: padding 0.3s;
-  }
-  .nav-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    font-weight: 900;
-    letter-spacing: -0.5px;
-    color: var(--black);
-    text-decoration: none;
-  }
+  nav { position: fixed; top: 0; width: 100%; z-index: 1000; padding: 20px 60px; display: flex; align-items: center; justify-content: space-between; background: rgba(245,240,232,.94); backdrop-filter: blur(14px); border-bottom: 1px solid rgba(201,168,76,.2); }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: var(--black); text-decoration: none; }
   .nav-logo span { color: var(--gold); }
   .nav-links { display: flex; gap: 36px; list-style: none; }
-  .nav-links a {
-    font-size: 0.82rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-    color: var(--text);
-    text-decoration: none;
-    position: relative;
-    padding-bottom: 4px;
-  }
-  .nav-links a::after {
-    content: '';
-    position: absolute; bottom: 0; left: 0;
-    width: 0; height: 1px;
-    background: var(--gold);
-    transition: width 0.3s ease;
-  }
+  .nav-links a { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 500; color: var(--text); text-decoration: none; position: relative; padding-bottom: 4px; }
+  .nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 1px; background: var(--gold); transition: width .3s; }
   .nav-links a:hover::after { width: 100%; }
   .nav-actions { display: flex; gap: 20px; align-items: center; }
-  .nav-icon { font-size: 1.2rem; cursor: none; position: relative; }
-  .cart-count {
-    position: absolute; top: -6px; right: -8px;
-    background: var(--gold); color: white;
-    font-size: 0.6rem; width: 16px; height: 16px;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-weight: 700;
-  }
+  .nav-icon { font-size: 1.15rem; cursor: none; position: relative; }
+  .cart-count { position: absolute; top: -6px; right: -8px; background: var(--gold); color: white; font-size: .6rem; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; }
 
-  /* ── HERO ── */
-  .hero {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding-top: 80px;
-    overflow: hidden;
-  }
-  .hero-left {
-    padding: 80px 60px;
-    display: flex; flex-direction: column; justify-content: center;
-    position: relative;
-  }
-  .hero-tag {
-    font-size: 0.72rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 24px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.2s forwards;
-  }
-  .hero-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(3.5rem, 6vw, 7rem);
-    font-weight: 900;
-    line-height: 0.92;
-    margin-bottom: 32px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.4s forwards;
-  }
-  .hero-title em {
-    font-style: italic;
-    color: var(--accent);
-    display: block;
-  }
-  .hero-sub {
-    font-size: 1rem;
-    color: var(--muted);
-    line-height: 1.7;
-    max-width: 380px;
-    margin-bottom: 48px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.6s forwards;
-  }
-  .hero-ctas {
-    display: flex; gap: 16px;
-    opacity: 0;
-    animation: fadeUp 0.8s 0.8s forwards;
-  }
-  .btn-primary {
-    padding: 16px 40px;
-    background: var(--black);
-    color: var(--cream);
-    font-size: 0.78rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-    border: none;
-    cursor: none;
-    transition: background 0.3s, transform 0.2s;
-    font-family: 'DM Sans', sans-serif;
-  }
+  /* HERO */
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 80px; overflow: hidden; }
+  .hero-left { padding: 80px 60px; display: flex; flex-direction: column; justify-content: center; }
+  .hero-tag { font-size: .72rem; letter-spacing: 4px; text-transform: uppercase; color: var(--gold); margin-bottom: 24px; opacity: 0; animation: fadeUp .8s .2s forwards; }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(3.2rem,5.5vw,6.5rem); font-weight: 900; line-height: .92; margin-bottom: 28px; opacity: 0; animation: fadeUp .8s .4s forwards; }
+  .hero-title em { font-style: italic; color: var(--accent); display: block; }
+  .hero-sub { font-size: 1rem; color: var(--muted); line-height: 1.7; max-width: 380px; margin-bottom: 44px; opacity: 0; animation: fadeUp .8s .6s forwards; }
+  .hero-ctas { display: flex; gap: 16px; opacity: 0; animation: fadeUp .8s .8s forwards; }
+  .btn-primary { padding: 15px 38px; background: var(--black); color: var(--cream); font-size: .76rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 500; border: none; cursor: none; font-family: 'DM Sans',sans-serif; transition: background .3s, transform .2s; }
   .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
-  .btn-outline {
-    padding: 16px 40px;
-    background: transparent;
-    color: var(--black);
-    font-size: 0.78rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    font-weight: 500;
-    border: 1.5px solid var(--black);
-    cursor: none;
-    transition: all 0.3s;
-    font-family: 'DM Sans', sans-serif;
-  }
+  .btn-outline { padding: 15px 38px; background: transparent; color: var(--black); font-size: .76rem; letter-spacing: 2.5px; text-transform: uppercase; font-weight: 500; border: 1.5px solid var(--black); cursor: none; font-family: 'DM Sans',sans-serif; transition: all .3s; }
   .btn-outline:hover { background: var(--black); color: var(--cream); }
 
-  .hero-right {
-    background: var(--black);
-    position: relative;
-    overflow: hidden;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .hero-image-placeholder {
-    width: 100%; height: 100%;
-    background: linear-gradient(135deg, #1a1a1a 0%, #2d2418 50%, #0a0a0a 100%);
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    position: relative;
-  }
-  .hero-shoe-visual {
-    width: 320px; height: 320px;
-    position: relative;
-  }
-  .hero-shoe-svg { width: 100%; height: 100%; }
-  .hero-badge {
-    position: absolute; bottom: 40px; right: 40px;
-    background: var(--gold);
-    width: 100px; height: 100px;
-    border-radius: 50%;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    animation: rotateSlow 8s linear infinite;
-  }
-  .hero-badge span {
-    font-size: 0.55rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    color: var(--black);
-    font-weight: 700;
-    text-align: center;
-    line-height: 1.4;
-  }
-  .floating-tag {
-    position: absolute;
-    background: rgba(245,240,232,0.12);
-    backdrop-filter: blur(10px);
-    border: 1px solid rgba(201,168,76,0.3);
-    padding: 12px 20px;
-    color: var(--cream);
-    font-size: 0.75rem;
-    letter-spacing: 1px;
-  }
-  .tag-1 { top: 30%; left: 10%; animation: float 4s ease-in-out infinite; }
-  .tag-2 { bottom: 25%; right: 8%; animation: float 4s ease-in-out 2s infinite; }
+  .hero-right { background: var(--black); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .hero-visual { width: 100%; height: 100%; background: linear-gradient(145deg,#111 0%,#1e1508 55%,#0a0a0a 100%); display: flex; align-items: center; justify-content: center; flex-direction: column; position: relative; }
+  .floating-tag { position: absolute; background: rgba(245,240,232,.1); backdrop-filter: blur(10px); border: 1px solid rgba(201,168,76,.3); padding: 10px 18px; color: var(--cream); font-size: .72rem; letter-spacing: 1px; }
+  .tag-1 { top: 22%; left: 6%; animation: float 4s ease-in-out infinite; }
+  .tag-2 { bottom: 22%; right: 5%; animation: float 4s ease-in-out 2s infinite; }
+  .hero-badge { position: absolute; bottom: 36px; right: 36px; background: var(--gold); width: 96px; height: 96px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; animation: rotateSlow 8s linear infinite; }
+  .hero-badge span { font-size: .52rem; letter-spacing: 1.5px; text-transform: uppercase; color: var(--black); font-weight: 700; text-align: center; line-height: 1.5; }
 
-  /* ── TICKER ── */
-  .ticker {
-    background: var(--gold);
-    padding: 14px 0;
-    overflow: hidden;
-    white-space: nowrap;
-  }
-  .ticker-inner {
-    display: inline-flex;
-    animation: ticker 20s linear infinite;
-  }
-  .ticker span {
-    font-size: 0.75rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--black);
-    font-weight: 600;
-    padding: 0 40px;
-  }
-  .ticker-dot { color: var(--black); }
+  /* TICKER */
+  .ticker { background: var(--gold); padding: 13px 0; overflow: hidden; white-space: nowrap; }
+  .ticker-inner { display: inline-flex; animation: ticker 22s linear infinite; }
+  .ticker span { font-size: .73rem; letter-spacing: 3px; text-transform: uppercase; color: var(--black); font-weight: 600; padding: 0 36px; }
 
-  /* ── CATEGORIES ── */
-  .categories {
-    padding: 100px 60px;
-    background: var(--black);
-  }
-  .section-header {
-    display: flex; justify-content: space-between; align-items: flex-end;
-    margin-bottom: 60px;
-  }
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 4vw, 4.5rem);
-    font-weight: 700;
-    color: var(--cream);
-    line-height: 1;
-  }
+  /* CATEGORIES */
+  .categories { padding: 100px 60px; background: var(--black); }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 56px; }
+  .section-title { font-family: 'Playfair Display',serif; font-size: clamp(2.2rem,3.5vw,4rem); font-weight: 700; color: var(--cream); line-height: 1; }
   .section-title em { font-style: italic; color: var(--gold); }
-  .section-link {
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--gold);
-    text-decoration: none;
-    border-bottom: 1px solid var(--gold);
-    padding-bottom: 2px;
-    transition: opacity 0.3s;
-  }
-  .section-link:hover { opacity: 0.7; }
+  .section-title.dark { color: var(--black); }
+  .section-title.dark em { color: var(--accent); }
+  .section-link { font-size: .73rem; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); text-decoration: none; border-bottom: 1px solid var(--gold); padding-bottom: 2px; transition: opacity .3s; }
+  .section-link:hover { opacity: .7; }
 
-  .cat-grid {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    grid-template-rows: auto auto;
-    gap: 2px;
-    height: 600px;
-  }
-  .cat-card {
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-  }
-  .cat-card:first-child { grid-row: 1 / 3; }
-  .cat-bg {
-    width: 100%; height: 100%;
-    display: flex; align-items: flex-end;
-    padding: 30px;
-    transition: transform 0.5s ease;
-  }
+  .cat-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr; grid-template-rows: 1fr 1fr; gap: 3px; height: 520px; }
+  .cat-card { position: relative; overflow: hidden; cursor: none; }
+  .cat-tall { grid-row: 1 / 3; }
+  .cat-bg { width: 100%; height: 100%; display: flex; align-items: flex-end; padding: 28px; transition: transform .5s ease; }
   .cat-card:hover .cat-bg { transform: scale(1.05); }
-  .cat-bg-1 { background: linear-gradient(160deg, #1a0f05 0%, #3d2b1f 100%); }
-  .cat-bg-2 { background: linear-gradient(160deg, #0f1a1a 0%, #1f3d3d 100%); }
-  .cat-bg-3 { background: linear-gradient(160deg, #1a0a0a 0%, #3d1f1f 100%); }
-  .cat-bg-4 { background: linear-gradient(160deg, #0a0f1a 0%, #1f2a3d 100%); }
-  .cat-bg-5 { background: linear-gradient(160deg, #0f1a0a 0%, #2a3d1f 100%); }
+  .cat-bg-1 { background: linear-gradient(155deg,#1a0f05 0%,#3d2b1f 100%); }
+  .cat-bg-2 { background: linear-gradient(155deg,#0d0d1a 0%,#1f1f3d 100%); }
+  .cat-bg-3 { background: linear-gradient(155deg,#0f1a0a 0%,#243d0f 100%); }
+  .cat-bg-4 { background: linear-gradient(155deg,#1a0a12 0%,#3d1225 100%); }
+  .cat-bg-5 { background: linear-gradient(155deg,#0a1515 0%,#1f3535 100%); }
   .cat-info { position: relative; z-index: 2; }
-  .cat-label {
-    font-size: 0.65rem;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 6px;
-  }
-  .cat-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.6rem;
-    color: var(--cream);
-    font-weight: 700;
-  }
-  .cat-count { font-size: 0.75rem; color: rgba(245,240,232,0.5); margin-top: 4px; }
-  .cat-icon {
-    position: absolute;
-    font-size: 6rem;
-    opacity: 0.08;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-20deg);
-  }
+  .cat-label { font-size: .62rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: 5px; }
+  .cat-name { font-family: 'Playfair Display',serif; font-size: 1.4rem; color: var(--cream); font-weight: 700; }
+  .cat-count { font-size: .7rem; color: rgba(245,240,232,.45); margin-top: 4px; }
+  .cat-icon { position: absolute; font-size: 5.5rem; opacity: .07; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-15deg); }
 
-  /* ── PRODUCTS ── */
+  /* PRODUCTS */
   .products { padding: 100px 60px; background: var(--cream); }
-  .products .section-title { color: var(--black); }
-  .products .section-title em { color: var(--accent); }
-
-  .filter-bar {
-    display: flex; gap: 8px; margin-bottom: 50px; flex-wrap: wrap;
-  }
-  .filter-btn {
-    padding: 10px 24px;
-    font-size: 0.72rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    background: transparent;
-    border: 1px solid #ccc;
-    cursor: none;
-    transition: all 0.3s;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-  }
-  .filter-btn.active, .filter-btn:hover {
-    background: var(--black); color: var(--cream); border-color: var(--black);
-  }
-
-  .product-grid {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 24px;
-  }
-  .product-card {
-    position: relative;
-    cursor: none;
-  }
-  .product-img {
-    aspect-ratio: 3/4;
-    background: var(--warm);
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .product-img-inner {
-    width: 100%; height: 100%;
-    display: flex; align-items: center; justify-content: center;
-    transition: transform 0.5s ease;
-    font-size: 4rem;
-    flex-direction: column;
-    gap: 8px;
-  }
-  .product-card:hover .product-img-inner { transform: scale(1.04); }
-  .product-overlay {
-    position: absolute; inset: 0;
-    background: rgba(10,10,10,0);
-    display: flex; flex-direction: column;
-    align-items: center; justify-content: flex-end;
-    padding: 20px;
-    gap: 8px;
-    transition: background 0.3s;
-  }
-  .product-card:hover .product-overlay { background: rgba(10,10,10,0.15); }
-  .overlay-btn {
-    width: 100%;
-    padding: 12px;
-    background: var(--black);
-    color: var(--cream);
-    font-size: 0.7rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    border: none;
-    cursor: none;
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 500;
-    transform: translateY(10px);
-    opacity: 0;
-    transition: all 0.3s;
-  }
+  .filter-bar { display: flex; gap: 8px; margin-bottom: 48px; flex-wrap: wrap; }
+  .filter-btn { padding: 9px 22px; font-size: .7rem; letter-spacing: 1.5px; text-transform: uppercase; background: transparent; border: 1px solid #ccc; cursor: none; font-family: 'DM Sans',sans-serif; font-weight: 500; transition: all .3s; }
+  .filter-btn.active, .filter-btn:hover { background: var(--black); color: var(--cream); border-color: var(--black); }
+  .product-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; }
+  .product-card { position: relative; cursor: none; }
+  .product-img { aspect-ratio: 3/4; background: var(--warm); position: relative; overflow: hidden; margin-bottom: 14px; }
+  .product-img-inner { width: 100%; height: 100%; position: absolute; inset: 0; }
+  .product-card:hover .product-img img { transform: scale(1.06); transition: transform .5s ease; }
+  .product-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; padding: 18px; background: rgba(10,10,10,0); transition: background .3s; }
+  .product-card:hover .product-overlay { background: rgba(10,10,10,.16); }
+  .overlay-btn { width: 100%; padding: 11px; background: var(--black); color: var(--cream); font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; border: none; cursor: none; font-family: 'DM Sans',sans-serif; font-weight: 500; transform: translateY(10px); opacity: 0; transition: all .3s; }
   .product-card:hover .overlay-btn { transform: translateY(0); opacity: 1; }
-  .wishlist-btn {
-    position: absolute; top: 16px; right: 16px;
-    background: white;
-    border: none; width: 36px; height: 36px;
-    border-radius: 50%;
-    font-size: 1rem;
-    cursor: none;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transition: transform 0.2s;
-  }
+  .wishlist-btn { position: absolute; top: 14px; right: 14px; background: white; border: none; width: 34px; height: 34px; border-radius: 50%; font-size: .95rem; cursor: none; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,.1); transition: transform .2s; }
   .wishlist-btn:hover { transform: scale(1.1); }
-  .product-badge {
-    position: absolute; top: 16px; left: 16px;
-    padding: 4px 10px;
-    font-size: 0.6rem;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    font-weight: 700;
-  }
+  .product-badge { position: absolute; top: 14px; left: 14px; padding: 4px 9px; font-size: .58rem; letter-spacing: 1.5px; text-transform: uppercase; font-weight: 700; }
   .badge-new { background: var(--black); color: var(--cream); }
   .badge-sale { background: var(--accent); color: white; }
   .badge-hot { background: var(--gold); color: var(--black); }
-
-  .product-name {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.05rem;
-    font-weight: 600;
-    margin-bottom: 4px;
-  }
-  .product-type { font-size: 0.72rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+  .product-name { font-family: 'Playfair Display',serif; font-size: 1rem; font-weight: 600; margin-bottom: 3px; }
+  .product-type { font-size: .68rem; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 7px; }
   .product-price { display: flex; gap: 10px; align-items: center; }
-  .price { font-size: 1rem; font-weight: 600; color: var(--black); }
-  .price-old { font-size: 0.85rem; color: var(--muted); text-decoration: line-through; }
-  .stars { font-size: 0.75rem; color: var(--gold); margin-top: 4px; }
-
-  .size-selector {
-    display: flex; gap: 6px; margin-top: 10px; flex-wrap: wrap;
-  }
-  .size-chip {
-    padding: 4px 10px;
-    font-size: 0.65rem;
-    border: 1px solid #ddd;
-    cursor: none;
-    transition: all 0.2s;
-  }
+  .price { font-size: .98rem; font-weight: 600; color: var(--black); }
+  .price-old { font-size: .82rem; color: var(--muted); text-decoration: line-through; }
+  .stars { font-size: .72rem; color: var(--gold); margin-top: 4px; }
+  .size-selector { display: flex; gap: 5px; margin-top: 9px; flex-wrap: wrap; }
+  .size-chip { padding: 4px 9px; font-size: .62rem; border: 1px solid #ddd; cursor: none; transition: all .2s; }
   .size-chip:hover { border-color: var(--black); background: var(--black); color: white; }
+  .color-dots { display: flex; gap: 6px; margin-top: 8px; }
+  .cdot { width: 14px; height: 14px; border-radius: 50%; border: 1px solid rgba(0,0,0,.15); cursor: none; transition: transform .2s; }
+  .cdot:hover { transform: scale(1.35); }
 
-  /* ── BANNER ── */
-  .banner {
-    background: var(--black);
-    padding: 100px 60px;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 60px;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .banner::before {
-    content: '';
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
-    top: -100px; right: -100px;
-  }
-  .banner-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.5rem, 4vw, 5rem);
-    color: var(--cream);
-    font-weight: 900;
-    line-height: 1;
-    margin-bottom: 20px;
-  }
+  /* BANNER */
+  .banner { background: var(--black); padding: 100px 60px; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; overflow: hidden; }
+  .banner::before { content: ''; position: absolute; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(201,168,76,.07) 0%, transparent 70%); top: -100px; right: -100px; }
+  .banner-title { font-family: 'Playfair Display',serif; font-size: clamp(2.2rem,3.8vw,4.8rem); color: var(--cream); font-weight: 900; line-height: 1; margin-bottom: 18px; }
   .banner-title em { font-style: italic; color: var(--gold); }
-  .banner-sub { color: rgba(245,240,232,0.6); line-height: 1.7; margin-bottom: 32px; }
-  .banner-visual {
-    position: relative;
-    text-align: center;
-  }
-  .banner-circle {
-    width: 300px; height: 300px;
-    border-radius: 50%;
-    border: 1px solid rgba(201,168,76,0.3);
-    margin: 0 auto;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 8rem;
-    position: relative;
-  }
-  .orbit {
-    position: absolute;
-    width: 360px; height: 360px;
-    border-radius: 50%;
-    border: 1px dashed rgba(201,168,76,0.2);
-    animation: rotateSlow 12s linear infinite;
-  }
-  .orbit-dot {
-    position: absolute;
-    top: -6px; left: 50%;
-    width: 12px; height: 12px;
-    background: var(--gold);
-    border-radius: 50%;
-    transform: translateX(-50%);
-  }
-  .counter-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    margin-top: 40px;
-    padding-top: 40px;
-    border-top: 1px solid rgba(245,240,232,0.1);
-  }
+  .banner-sub { color: rgba(245,240,232,.6); line-height: 1.7; margin-bottom: 30px; }
+  .counter-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; margin-top: 38px; padding-top: 38px; border-top: 1px solid rgba(245,240,232,.1); }
   .counter { text-align: center; }
-  .counter-num {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--gold);
-    display: block;
-  }
-  .counter-label { font-size: 0.7rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .counter-num { font-family: 'Playfair Display',serif; font-size: 2.2rem; font-weight: 900; color: var(--gold); display: block; }
+  .counter-label { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .dial-wrap { display: flex; align-items: center; justify-content: center; }
+  .dial { width: 280px; height: 280px; border-radius: 50%; border: 1px solid rgba(201,168,76,.25); position: relative; display: flex; align-items: center; justify-content: center; }
+  .dial-inner { width: 180px; height: 180px; border-radius: 50%; border: 1px dashed rgba(201,168,76,.2); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display',serif; font-size: 1rem; font-style: italic; color: rgba(201,168,76,.7); text-align: center; line-height: 1.4; }
+  .orbit-ring { position: absolute; width: 320px; height: 320px; border-radius: 50%; border: 1px dashed rgba(201,168,76,.15); animation: rotateSlow 14s linear infinite; }
+  .orbit-dot { position: absolute; top: -5px; left: 50%; width: 10px; height: 10px; background: var(--gold); border-radius: 50%; transform: translateX(-50%); }
 
-  /* ── TESTIMONIALS ── */
+  /* TESTIMONIALS */
   .testimonials { padding: 100px 60px; background: var(--warm); }
-  .testimonials .section-title { color: var(--black); }
-  .testi-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    margin-top: 50px;
-  }
-  .testi-card {
-    background: var(--cream);
-    padding: 36px;
-    position: relative;
-  }
-  .testi-quote {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 1.2rem;
-    font-style: italic;
-    line-height: 1.6;
-    color: var(--text);
-    margin-bottom: 24px;
-  }
-  .testi-author { display: flex; gap: 12px; align-items: center; }
-  .testi-avatar {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    background: var(--black);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.2rem;
-  }
-  .testi-name { font-weight: 600; font-size: 0.9rem; }
-  .testi-loc { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-  .testi-stars { position: absolute; top: 36px; right: 36px; color: var(--gold); font-size: 0.85rem; }
-  .big-quote {
-    font-family: 'Playfair Display', serif;
-    font-size: 5rem;
-    color: var(--gold);
-    opacity: 0.2;
-    position: absolute;
-    top: 16px; left: 24px;
-    line-height: 1;
-  }
+  .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 48px; }
+  .testi-card { background: var(--cream); padding: 34px; position: relative; }
+  .big-quote { font-family: 'Playfair Display',serif; font-size: 4.5rem; color: var(--gold); opacity: .18; position: absolute; top: 14px; left: 22px; line-height: 1; }
+  .testi-stars { position: absolute; top: 34px; right: 34px; color: var(--gold); font-size: .82rem; }
+  .testi-quote { font-family: 'Cormorant Garamond',serif; font-size: 1.15rem; font-style: italic; line-height: 1.6; margin-bottom: 22px; }
+  .testi-author { display: flex; gap: 11px; align-items: center; }
+  .testi-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; }
+  .testi-name { font-weight: 600; font-size: .88rem; }
+  .testi-loc { font-size: .7rem; color: var(--muted); margin-top: 2px; }
 
-  /* ── INSTAGRAM STRIP ── */
+  /* INSTA */
   .insta-strip { padding: 80px 60px; background: var(--black); }
-  .insta-strip .section-title { color: var(--cream); margin-bottom: 40px; }
-  .insta-handle {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: 1.2rem;
-    color: var(--gold);
-    margin-bottom: 40px;
-    display: block;
-  }
-  .insta-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 3px; }
-  .insta-item {
-    aspect-ratio: 1;
-    background: var(--warm);
-    position: relative;
-    overflow: hidden;
-    cursor: none;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 2.5rem;
-  }
-  .insta-item:hover::after {
-    content: '♡  View';
-    position: absolute; inset: 0;
-    background: rgba(201,168,76,0.85);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 0.75rem;
-    letter-spacing: 2px;
-    color: var(--black);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-  }
-  .ig-bg-1 { background: linear-gradient(135deg, #2d1a0a, #5c3520); }
-  .ig-bg-2 { background: linear-gradient(135deg, #0a1a2d, #20355c); }
-  .ig-bg-3 { background: linear-gradient(135deg, #1a2d0a, #35520a); }
-  .ig-bg-4 { background: linear-gradient(135deg, #2d0a1a, #5c2035); }
-  .ig-bg-5 { background: linear-gradient(135deg, #1a0a2d, #35205c); }
-  .ig-bg-6 { background: linear-gradient(135deg, #2d2a0a, #5c5220); }
+  .insta-handle { font-family: 'Cormorant Garamond',serif; font-style: italic; font-size: 1.2rem; color: var(--gold); margin-bottom: 36px; display: block; }
+  .insta-grid { display: grid; grid-template-columns: repeat(6,1fr); gap: 3px; }
+  .insta-item { aspect-ratio: 1; position: relative; overflow: hidden; cursor: none; display: flex; align-items: center; justify-content: center; font-size: 2.2rem; }
+  .insta-item:hover::after { content: '♡  View'; position: absolute; inset: 0; background: rgba(201,168,76,.88); display: flex; align-items: center; justify-content: center; font-size: .73rem; letter-spacing: 2px; color: var(--black); font-family: 'DM Sans',sans-serif; font-weight: 600; }
+  .ig-bg-1{background:linear-gradient(135deg,#1e1508,#3d2b0f)} .ig-bg-2{background:linear-gradient(135deg,#0f0f1e,#1f1f3d)} .ig-bg-3{background:linear-gradient(135deg,#0e1a0e,#1f3d1f)} .ig-bg-4{background:linear-gradient(135deg,#1e0a0e,#3d1220)} .ig-bg-5{background:linear-gradient(135deg,#0e1616,#1f3535)} .ig-bg-6{background:linear-gradient(135deg,#1e1a08,#3d350f)}
 
-  /* ── FOOTER ── */
-  footer {
-    background: var(--black);
-    padding: 80px 60px 40px;
-    border-top: 1px solid rgba(201,168,76,0.2);
-  }
-  .footer-top {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 60px;
-    margin-bottom: 60px;
-  }
-  .footer-logo {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.8rem;
-    font-weight: 900;
-    color: var(--cream);
-    margin-bottom: 16px;
-    display: block;
-  }
+  /* NEWSLETTER */
+  .newsletter { background: var(--gold); padding: 68px 60px; text-align: center; }
+  .newsletter-title { font-family: 'Playfair Display',serif; font-size: 2.4rem; font-weight: 900; color: var(--black); margin-bottom: 10px; }
+  .newsletter-sub { color: rgba(10,10,10,.65); margin-bottom: 30px; }
+  .newsletter-form { display: flex; max-width: 460px; margin: 0 auto; }
+  .newsletter-input { flex: 1; padding: 15px 18px; background: var(--black); border: none; color: var(--cream); font-family: 'DM Sans',sans-serif; font-size: .88rem; outline: none; }
+  .newsletter-input::placeholder { color: rgba(245,240,232,.35); }
+  .newsletter-btn { padding: 15px 26px; background: var(--cream); border: none; font-size: .7rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; cursor: none; font-family: 'DM Sans',sans-serif; transition: opacity .3s; }
+  .newsletter-btn:hover { opacity: .75; }
+
+  /* FOOTER */
+  footer { background: var(--black); padding: 76px 60px 38px; border-top: 1px solid rgba(201,168,76,.18); }
+  .footer-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 56px; margin-bottom: 56px; }
+  .footer-logo { font-family: 'Playfair Display',serif; font-size: 1.75rem; font-weight: 900; color: var(--cream); margin-bottom: 14px; display: block; }
   .footer-logo span { color: var(--gold); }
-  .footer-tagline { color: var(--muted); font-size: 0.85rem; line-height: 1.7; margin-bottom: 24px; }
-  .social-links { display: flex; gap: 12px; }
-  .social-link {
-    width: 38px; height: 38px;
-    border: 1px solid rgba(255,255,255,0.15);
-    display: flex; align-items: center; justify-content: center;
-    color: var(--cream); font-size: 0.9rem;
-    transition: all 0.3s; cursor: none;
-  }
+  .footer-tagline { color: var(--muted); font-size: .83rem; line-height: 1.7; margin-bottom: 22px; }
+  .social-links { display: flex; gap: 10px; }
+  .social-link { width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; color: var(--cream); font-size: .88rem; transition: all .3s; cursor: none; text-decoration: none; }
   .social-link:hover { background: var(--gold); border-color: var(--gold); color: var(--black); }
-  .footer-heading {
-    font-size: 0.7rem;
-    letter-spacing: 2.5px;
-    text-transform: uppercase;
-    color: var(--cream);
-    font-weight: 600;
-    margin-bottom: 20px;
-  }
-  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
-  .footer-links a {
-    color: var(--muted); font-size: 0.85rem;
-    text-decoration: none; transition: color 0.2s;
-  }
+  .footer-heading { font-size: .68rem; letter-spacing: 2.5px; text-transform: uppercase; color: var(--cream); font-weight: 600; margin-bottom: 18px; }
+  .footer-links { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+  .footer-links a { color: var(--muted); font-size: .83rem; text-decoration: none; transition: color .2s; }
   .footer-links a:hover { color: var(--gold); }
-  .footer-bottom {
-    padding-top: 32px;
-    border-top: 1px solid rgba(255,255,255,0.08);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .footer-copy { font-size: 0.75rem; color: var(--muted); }
-  .payment-icons { display: flex; gap: 8px; }
-  .pay-icon {
-    padding: 4px 12px;
-    border: 1px solid rgba(255,255,255,0.15);
-    font-size: 0.7rem;
-    color: var(--muted);
-    border-radius: 3px;
-  }
+  .footer-bottom { padding-top: 30px; border-top: 1px solid rgba(255,255,255,.07); display: flex; justify-content: space-between; align-items: center; }
+  .footer-copy { font-size: .73rem; color: var(--muted); }
+  .pay-icon { padding: 4px 11px; border: 1px solid rgba(255,255,255,.14); font-size: .68rem; color: var(--muted); border-radius: 3px; }
+  .payment-icons { display: flex; gap: 7px; }
 
-  /* ── CART DRAWER ── */
-  .cart-drawer {
-    position: fixed; top: 0; right: -420px;
-    width: 420px; height: 100vh;
-    background: var(--cream);
-    z-index: 2000;
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 40px;
-    overflow-y: auto;
-    box-shadow: -10px 0 40px rgba(0,0,0,0.15);
-  }
+  /* CART */
+  .cart-drawer { position: fixed; top: 0; right: -430px; width: 430px; height: 100vh; background: var(--cream); z-index: 2000; transition: right .4s cubic-bezier(.4,0,.2,1); padding: 38px; overflow-y: auto; box-shadow: -10px 0 40px rgba(0,0,0,.14); }
   .cart-drawer.open { right: 0; }
-  .cart-header {
-    display: flex; justify-content: space-between; align-items: center;
-    margin-bottom: 32px;
-  }
-  .cart-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-  .cart-close {
-    background: none; border: none; font-size: 1.5rem;
-    cursor: none; line-height: 1;
-  }
-  .cart-item {
-    display: grid;
-    grid-template-columns: 70px 1fr auto;
-    gap: 16px;
-    align-items: center;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--warm);
-  }
-  .cart-item-img {
-    background: var(--warm);
-    aspect-ratio: 1;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 1.8rem;
-  }
-  .cart-item-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 4px; }
-  .cart-item-size { font-size: 0.75rem; color: var(--muted); }
+  .cart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+  .cart-title { font-family: 'Playfair Display',serif; font-size: 1.45rem; font-weight: 700; }
+  .cart-close { background: none; border: none; font-size: 1.4rem; cursor: none; }
+  .cart-item { display: grid; grid-template-columns: 68px 1fr auto; gap: 14px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--warm); }
+  .cart-item-img { background: var(--warm); aspect-ratio: 1; display: flex; align-items: center; justify-content: center; font-size: 1.7rem; }
+  .cart-item-name { font-weight: 600; font-size: .88rem; margin-bottom: 3px; }
+  .cart-item-size { font-size: .72rem; color: var(--muted); }
   .cart-item-price { font-weight: 600; }
-  .cart-total {
-    margin-top: 24px;
-    padding-top: 24px;
-    border-top: 2px solid var(--black);
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .cart-total-label { font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
-  .cart-total-price {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-  }
-  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 1999; display: none; }
+  .cart-total { margin-top: 22px; padding-top: 22px; border-top: 2px solid var(--black); display: flex; justify-content: space-between; align-items: center; }
+  .cart-total-label { font-size: .72rem; letter-spacing: 2px; text-transform: uppercase; font-weight: 600; }
+  .cart-total-price { font-family: 'Playfair Display',serif; font-size: 1.45rem; font-weight: 700; }
+  .overlay { position: fixed; inset: 0; background: rgba(0,0,0,.38); z-index: 1999; display: none; }
   .overlay.open { display: block; }
 
-  /* ── NEWSLETTER ── */
-  .newsletter {
-    background: var(--gold);
-    padding: 70px 60px;
-    text-align: center;
-  }
-  .newsletter-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 2.5rem;
-    font-weight: 900;
-    color: var(--black);
-    margin-bottom: 12px;
-  }
-  .newsletter-sub { color: rgba(10,10,10,0.7); margin-bottom: 32px; }
-  .newsletter-form {
-    display: flex; gap: 0; max-width: 480px; margin: 0 auto;
-  }
-  .newsletter-input {
-    flex: 1;
-    padding: 16px 20px;
-    background: var(--black);
-    border: none;
-    color: var(--cream);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-  }
-  .newsletter-input::placeholder { color: rgba(245,240,232,0.4); }
-  .newsletter-btn {
-    padding: 16px 28px;
-    background: var(--cream);
-    border: none;
-    font-size: 0.72rem;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 600;
-    cursor: none;
-    font-family: 'DM Sans', sans-serif;
-    transition: opacity 0.3s;
-  }
-  .newsletter-btn:hover { opacity: 0.8; }
-
-  /* ── ANIMATIONS ── */
-  @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(30px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes ticker {
-    from { transform: translateX(0); }
-    to { transform: translateX(-50%); }
-  }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-  }
-  @keyframes rotateSlow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed; bottom: 30px; left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: var(--black); color: var(--cream);
-    padding: 14px 28px;
-    font-size: 0.8rem; letter-spacing: 1px;
-    z-index: 9999;
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    border-left: 3px solid var(--gold);
-  }
+  .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--black); color: var(--cream); padding: 13px 26px; font-size: .78rem; letter-spacing: 1px; z-index: 9999; transition: transform .4s cubic-bezier(.4,0,.2,1); border-left: 3px solid var(--gold); }
   .toast.show { transform: translateX(-50%) translateY(0); }
 
-  /* ── RESPONSIVE ── */
-  @media (max-width: 1024px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-right { min-height: 400px; }
-    .product-grid { grid-template-columns: repeat(2, 1fr); }
-    .cat-grid { grid-template-columns: 1fr 1fr; height: auto; }
-    .cat-card:first-child { grid-row: auto; }
-    .footer-top { grid-template-columns: 1fr 1fr; }
-    .testi-grid { grid-template-columns: 1fr; }
-    .insta-grid { grid-template-columns: repeat(3, 1fr); }
-    nav { padding: 20px 30px; }
-    .hero-left, .categories, .products, .banner, .newsletter, footer { padding-left: 30px; padding-right: 30px; }
+  @keyframes fadeUp { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+  @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+  @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+  @keyframes rotateSlow { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+  @keyframes sway { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+
+  @media(max-width:1024px){
+    .hero{grid-template-columns:1fr} .hero-right{min-height:380px}
+    .product-grid{grid-template-columns:repeat(2,1fr)}
+    .cat-grid{grid-template-columns:1fr 1fr;height:auto;grid-template-rows:auto}
+    .cat-tall{grid-row:auto}
+    .footer-top{grid-template-columns:1fr 1fr}
+    .testi-grid{grid-template-columns:1fr}
+    .insta-grid{grid-template-columns:repeat(3,1fr)}
+    .banner{grid-template-columns:1fr}
+    nav,.hero-left,.categories,.products,.banner,.newsletter,footer,.testimonials,.insta-strip{padding-left:24px;padding-right:24px}
   }
 </style>
 </head>
 <body>
 
-<!-- CURSOR -->
 <div class="cursor" id="cursor"></div>
 <div class="cursor-ring" id="cursorRing"></div>
-
-<!-- OVERLAY -->
 <div class="overlay" id="overlay" onclick="toggleCart()"></div>
 
-<!-- CART DRAWER -->
+<!-- CART -->
 <div class="cart-drawer" id="cartDrawer">
   <div class="cart-header">
     <span class="cart-title">Your Bag</span>
     <button class="cart-close" onclick="toggleCart()">✕</button>
   </div>
   <div id="cartItems"></div>
-  <div class="cart-total" id="cartTotal" style="display:none;">
+  <div class="cart-total" id="cartTotal" style="display:none">
     <div>
-      <div class="cart-total-label">Total Amount</div>
-      <div style="font-size:0.72rem;color:var(--muted);margin-top:4px;">Free shipping on orders above ₹2000</div>
+      <div class="cart-total-label">Total</div>
+      <div style="font-size:.7rem;color:var(--muted);margin-top:3px">Free shipping above ₹1999</div>
     </div>
     <div class="cart-total-price" id="totalPrice">₹0</div>
   </div>
-  <button class="btn-primary" style="width:100%;margin-top:20px;display:none;" id="checkoutBtn">Checkout Now</button>
-  <p style="text-align:center;color:var(--muted);font-size:0.75rem;margin-top:16px;" id="emptyCart">Your bag is empty ✨</p>
+  <button class="btn-primary" style="width:100%;margin-top:18px;display:none" id="checkoutBtn">Checkout Now</button>
+  <p style="text-align:center;color:var(--muted);font-size:.75rem;margin-top:14px" id="emptyCart">Your bag is empty ✨</p>
 </div>
-
-<!-- TOAST -->
-<div class="toast" id="toast">Added to bag!</div>
+<div class="toast" id="toast"></div>
 
 <!-- NAV -->
 <nav>
@@ -852,54 +259,69 @@
   <div class="nav-actions">
     <span class="nav-icon">🔍</span>
     <span class="nav-icon">♡</span>
-    <span class="nav-icon" onclick="toggleCart()" style="position:relative;">
-      🛍️
-      <span class="cart-count" id="cartCount">0</span>
-    </span>
+    <span class="nav-icon" onclick="toggleCart()" style="position:relative">🛍️<span class="cart-count" id="cartCount">0</span></span>
   </div>
 </nav>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-left">
-    <p class="hero-tag">✦ New Collection 2025</p>
-    <h1 class="hero-title">
-      Step Into<br>
-      <em>Your Story</em>
-    </h1>
-    <p class="hero-sub">From streets to runways — every pair tells a tale. Discover footwear that moves with you and speaks for you.</p>
+    <p class="hero-tag">✦ New Drop — SS 2025</p>
+    <h1 class="hero-title">Dress to<br><em>Dominate</em></h1>
+    <p class="hero-sub">Bellbottoms that flare with attitude. Baggy fits that breathe freedom. Premium shirts that mean business. This is SoleToStyle.</p>
     <div class="hero-ctas">
-      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Now</button>
+      <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({behavior:'smooth'})">Shop Collection</button>
       <button class="btn-outline">View Lookbook</button>
     </div>
   </div>
   <div class="hero-right">
-    <div class="hero-image-placeholder">
-      <div class="hero-shoe-visual">
-        <svg class="hero-shoe-svg" viewBox="0 0 300 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <!-- Stylized shoe silhouette -->
-          <ellipse cx="150" cy="170" rx="130" ry="12" fill="rgba(201,168,76,0.12)"/>
-          <!-- Sole -->
-          <path d="M30 155 Q40 165 80 165 L240 158 Q265 154 268 148 Q270 142 240 138 L100 135 Q60 132 35 140 Z" fill="#c9a84c" opacity="0.8"/>
-          <!-- Upper -->
-          <path d="M35 140 L100 135 L240 138 L260 120 Q270 100 250 90 Q220 75 180 80 L120 78 Q85 78 65 90 Q40 105 35 140 Z" fill="#f5f0e8" opacity="0.9"/>
-          <!-- Laces area -->
-          <path d="M120 78 L180 80 L200 95 L100 95 Z" fill="rgba(201,168,76,0.4)"/>
-          <line x1="130" y1="80" x2="125" y2="95" stroke="#c9a84c" stroke-width="1.5" opacity="0.6"/>
-          <line x1="145" y1="79" x2="140" y2="95" stroke="#c9a84c" stroke-width="1.5" opacity="0.6"/>
-          <line x1="160" y1="79" x2="155" y2="95" stroke="#c9a84c" stroke-width="1.5" opacity="0.6"/>
-          <line x1="175" y1="80" x2="170" y2="95" stroke="#c9a84c" stroke-width="1.5" opacity="0.6"/>
-          <!-- Heel -->
-          <path d="M35 140 Q30 130 38 122 Q48 112 65 110 L65 132 Z" fill="#e0d8c8" opacity="0.7"/>
-          <!-- Brand mark -->
-          <text x="150" y="148" text-anchor="middle" fill="#c9a84c" font-size="9" font-family="serif" opacity="0.8">SOLETOSTYLE</text>
-        </svg>
-      </div>
-      <div class="floating-tag tag-1">✦ Premium Leather</div>
-      <div class="floating-tag tag-2">Handcrafted in India</div>
-      <div class="hero-badge">
-        <span>New<br>Arrivals<br>2025</span>
-      </div>
+    <div class="hero-visual">
+      <!-- Outfit SVG illustration -->
+      <svg width="230" height="370" viewBox="0 0 230 370" fill="none" xmlns="http://www.w3.org/2000/svg" style="animation:sway 5s ease-in-out infinite;transform-origin:50% 10%">
+        <!-- Head -->
+        <ellipse cx="115" cy="36" rx="20" ry="24" fill="#e0cba8"/>
+        <!-- Neck -->
+        <rect x="109" y="56" width="12" height="16" fill="#e0cba8"/>
+        <!-- Premium shirt body -->
+        <path d="M64 74 L109 64 L115 78 L121 64 L166 74 L170 148 L60 148 Z" fill="#f5f0e8"/>
+        <!-- Shirt vertical stripes -->
+        <line x1="80" y1="74" x2="76" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
+        <line x1="95" y1="70" x2="92" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
+        <line x1="115" y1="78" x2="115" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
+        <line x1="135" y1="70" x2="138" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
+        <line x1="150" y1="74" x2="154" y2="148" stroke="rgba(201,168,76,0.28)" stroke-width="4"/>
+        <!-- Collar -->
+        <path d="M109 64 L115 86 L121 64" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+        <!-- Buttons -->
+        <circle cx="115" cy="98" r="2.5" fill="#c9a84c"/>
+        <circle cx="115" cy="113" r="2.5" fill="#c9a84c"/>
+        <circle cx="115" cy="128" r="2.5" fill="#c9a84c"/>
+        <!-- Sleeves -->
+        <path d="M64 74 L36 114 L50 120 L70 88 Z" fill="#ece7dc"/>
+        <path d="M166 74 L194 114 L180 120 L160 88 Z" fill="#ece7dc"/>
+        <!-- Belt -->
+        <rect x="60" y="145" width="110" height="9" fill="#6b3f1f" rx="1"/>
+        <rect x="109" y="144" width="12" height="11" fill="#c9a84c" rx="1"/>
+        <!-- BELLBOTTOM JEANS waist -->
+        <path d="M60 153 L170 153 L163 235 L131 235 L115 195 L99 235 L67 235 Z" fill="#1c2040"/>
+        <!-- Left flare leg -->
+        <path d="M67 235 L58 308 L30 342 L50 349 L84 312 L99 235 Z" fill="#1c2040"/>
+        <!-- Right flare leg -->
+        <path d="M131 235 L146 312 L180 349 L200 342 L172 308 L163 235 Z" fill="#1c2040"/>
+        <!-- Denim texture lines -->
+        <line x1="115" y1="153" x2="115" y2="195" stroke="rgba(201,168,76,0.35)" stroke-width="1.5" stroke-dasharray="4 3"/>
+        <line x1="85" y1="235" x2="56" y2="328" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+        <line x1="144" y1="235" x2="172" y2="328" stroke="rgba(255,255,255,0.08)" stroke-width="1.5"/>
+        <!-- Flare hem highlights -->
+        <path d="M30 342 Q40 346 50 349" stroke="#c9a84c" stroke-width="1.2" opacity="0.6" fill="none"/>
+        <path d="M180 349 Q190 346 200 342" stroke="#c9a84c" stroke-width="1.2" opacity="0.6" fill="none"/>
+        <!-- Pocket detail -->
+        <path d="M75 165 Q82 162 90 165 L88 185 Q82 188 76 185 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+        <path d="M130 165 Q138 162 145 165 L143 185 Q137 188 131 185 Z" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+      </svg>
+      <div class="floating-tag tag-1">✦ Premium Cotton</div>
+      <div class="floating-tag tag-2">Flare Season Is Back</div>
+      <div class="hero-badge"><span>New<br>Drop<br>2025</span></div>
     </div>
   </div>
 </section>
@@ -907,76 +329,50 @@
 <!-- TICKER -->
 <div class="ticker">
   <div class="ticker-inner">
-    <span>Free Shipping Above ₹2000</span><span class="ticker-dot">✦</span>
-    <span>New Collection Dropped</span><span class="ticker-dot">✦</span>
-    <span>Handcrafted Premium Footwear</span><span class="ticker-dot">✦</span>
-    <span>Easy Returns Within 7 Days</span><span class="ticker-dot">✦</span>
-    <span>COD Available Pan India</span><span class="ticker-dot">✦</span>
-    <span>Follow @soletostylee on Instagram</span><span class="ticker-dot">✦</span>
-    <span>Free Shipping Above ₹2000</span><span class="ticker-dot">✦</span>
-    <span>New Collection Dropped</span><span class="ticker-dot">✦</span>
-    <span>Handcrafted Premium Footwear</span><span class="ticker-dot">✦</span>
-    <span>Easy Returns Within 7 Days</span><span class="ticker-dot">✦</span>
-    <span>COD Available Pan India</span><span class="ticker-dot">✦</span>
-    <span>Follow @soletostylee on Instagram</span><span class="ticker-dot">✦</span>
+    <span>Free Shipping Above ₹1999</span><span>✦</span><span>Bellbottoms Are Back & Bigger</span><span>✦</span><span>Premium Handpicked Fabrics</span><span>✦</span><span>Easy 7-Day Returns</span><span>✦</span><span>COD Available Pan India</span><span>✦</span><span>Follow @soletostylee on Instagram</span><span>✦</span>
+    <span>Free Shipping Above ₹1999</span><span>✦</span><span>Bellbottoms Are Back & Bigger</span><span>✦</span><span>Premium Handpicked Fabrics</span><span>✦</span><span>Easy 7-Day Returns</span><span>✦</span><span>COD Available Pan India</span><span>✦</span><span>Follow @soletostylee on Instagram</span><span>✦</span>
   </div>
 </div>
 
 <!-- CATEGORIES -->
 <section class="categories" id="categories">
   <div class="section-header">
-    <h2 class="section-title">Shop by<br><em>Category</em></h2>
+    <h2 class="section-title">Shop by<br><em>Vibe</em></h2>
     <a href="#" class="section-link">All Categories →</a>
   </div>
   <div class="cat-grid">
-    <div class="cat-card">
-      <div class="cat-bg cat-bg-1" style="min-height:400px;">
-        <div class="cat-icon">👠</div>
+    <div class="cat-card cat-tall">
+      <div class="cat-bg cat-bg-1" style="height:100%">
+        <div class="cat-icon">👖</div>
         <div class="cat-info">
-          <div class="cat-label">Women's</div>
-          <div class="cat-name">Heels & Pumps</div>
-          <div class="cat-count">48 Styles</div>
+          <div class="cat-label">Iconic</div>
+          <div class="cat-name">Bellbottom Jeans</div>
+          <div class="cat-count">34 Styles</div>
         </div>
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-2" style="min-height:196px;">
-        <div class="cat-icon">👟</div>
-        <div class="cat-info">
-          <div class="cat-label">Unisex</div>
-          <div class="cat-name">Sneakers</div>
-          <div class="cat-count">62 Styles</div>
-        </div>
+      <div class="cat-bg cat-bg-2" style="height:100%">
+        <div class="cat-icon">🩳</div>
+        <div class="cat-info"><div class="cat-label">Street</div><div class="cat-name">Baggy Pants</div><div class="cat-count">41 Styles</div></div>
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-3" style="min-height:196px;">
-        <div class="cat-icon">🥾</div>
-        <div class="cat-info">
-          <div class="cat-label">Men's</div>
-          <div class="cat-name">Boots</div>
-          <div class="cat-count">35 Styles</div>
-        </div>
+      <div class="cat-bg cat-bg-4" style="height:100%">
+        <div class="cat-icon">👕</div>
+        <div class="cat-info"><div class="cat-label">Casual</div><div class="cat-name">T-Shirts</div><div class="cat-count">56 Styles</div></div>
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-4" style="min-height:196px;">
-        <div class="cat-icon">🩴</div>
-        <div class="cat-info">
-          <div class="cat-label">Summer</div>
-          <div class="cat-name">Sandals</div>
-          <div class="cat-count">29 Styles</div>
-        </div>
+      <div class="cat-bg cat-bg-3" style="height:100%">
+        <div class="cat-icon">👔</div>
+        <div class="cat-info"><div class="cat-label">Formal</div><div class="cat-name">Formal Baggy</div><div class="cat-count">28 Styles</div></div>
       </div>
     </div>
     <div class="cat-card">
-      <div class="cat-bg cat-bg-5" style="min-height:196px;">
-        <div class="cat-icon">👞</div>
-        <div class="cat-info">
-          <div class="cat-label">Formal</div>
-          <div class="cat-name">Oxfords</div>
-          <div class="cat-count">21 Styles</div>
-        </div>
+      <div class="cat-bg cat-bg-5" style="height:100%">
+        <div class="cat-icon">🧥</div>
+        <div class="cat-info"><div class="cat-label">Premium</div><div class="cat-name">Premium Shirts</div><div class="cat-count">39 Styles</div></div>
       </div>
     </div>
   </div>
@@ -985,95 +381,84 @@
 <!-- PRODUCTS -->
 <section class="products" id="products">
   <div class="section-header">
-    <h2 class="section-title">Trending<br><em>Right Now</em></h2>
-    <a href="#" class="section-link">View All →</a>
+    <h2 class="section-title dark">Trending<br><em>Right Now</em></h2>
+    <a href="#" class="section-link" style="color:var(--accent);border-color:var(--accent)">View All →</a>
   </div>
   <div class="filter-bar">
     <button class="filter-btn active" onclick="setFilter(this,'all')">All</button>
-    <button class="filter-btn" onclick="setFilter(this,'new')">New In</button>
-    <button class="filter-btn" onclick="setFilter(this,'bestseller')">Bestsellers</button>
+    <button class="filter-btn" onclick="setFilter(this,'bellbottom')">Bellbottoms</button>
+    <button class="filter-btn" onclick="setFilter(this,'baggy')">Baggy Pants</button>
+    <button class="filter-btn" onclick="setFilter(this,'formal')">Formal Baggy</button>
+    <button class="filter-btn" onclick="setFilter(this,'tshirt')">T-Shirts</button>
+    <button class="filter-btn" onclick="setFilter(this,'shirt')">Premium Shirts</button>
     <button class="filter-btn" onclick="setFilter(this,'sale')">On Sale</button>
-    <button class="filter-btn" onclick="setFilter(this,'men')">Men</button>
-    <button class="filter-btn" onclick="setFilter(this,'women')">Women</button>
   </div>
-  <div class="product-grid" id="productGrid">
-    <!-- Products injected by JS -->
-  </div>
+  <div class="product-grid" id="productGrid"></div>
 </section>
 
 <!-- BANNER -->
 <section class="banner" id="about">
   <div>
-    <h2 class="banner-title">Crafted With<br><em>Passion</em><br>& Precision</h2>
-    <p class="banner-sub">Every pair from SoleToStyle is a testament to artisanal craftsmanship. We source the finest materials and pour soul into every stitch, every sole, every silhouette.</p>
+    <h2 class="banner-title">Fabric of<br><em>Your Identity</em></h2>
+    <p class="banner-sub">Every thread at SoleToStyle is chosen with intention. We craft clothes for people who refuse to blend in — from flared bellbottoms on the streets to sharp formal baggy trousers in the boardroom.</p>
     <button class="btn-primary">Our Story →</button>
     <div class="counter-row">
-      <div class="counter"><span class="counter-num">5K+</span><span class="counter-label">Happy Customers</span></div>
-      <div class="counter"><span class="counter-num">200+</span><span class="counter-label">Styles Available</span></div>
-      <div class="counter"><span class="counter-num">4.9★</span><span class="counter-label">Average Rating</span></div>
+      <div class="counter"><span class="counter-num">8K+</span><span class="counter-label">Happy Customers</span></div>
+      <div class="counter"><span class="counter-num">200+</span><span class="counter-label">Styles</span></div>
+      <div class="counter"><span class="counter-num">4.9★</span><span class="counter-label">Avg Rating</span></div>
     </div>
   </div>
-  <div class="banner-visual">
-    <div class="banner-circle">
-      <span>✦</span>
-      <div class="orbit"><div class="orbit-dot"></div></div>
+  <div class="dial-wrap">
+    <div class="dial">
+      <div class="orbit-ring"><div class="orbit-dot"></div></div>
+      <div class="dial-inner">Wear Your<br>Identity</div>
     </div>
-    <p style="color:rgba(245,240,232,0.4);font-size:0.75rem;letter-spacing:3px;text-transform:uppercase;margin-top:24px;">Walk With Intent</p>
   </div>
 </section>
 
 <!-- TESTIMONIALS -->
 <section class="testimonials">
-  <h2 class="section-title" style="text-align:center;margin-bottom:8px;">What Our <em style="font-style:italic;color:var(--accent);">Sole Mates</em> Say</h2>
+  <h2 class="section-title dark" style="text-align:center;margin-bottom:0">What Our <em style="font-style:italic;color:var(--accent)">Style Gang</em> Says</h2>
   <div class="testi-grid">
     <div class="testi-card">
       <div class="big-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">Absolutely obsessed with my new block heels! The quality is insane for the price. Wore them all night and my feet didn't hurt at all.</p>
-      <div class="testi-author">
-        <div class="testi-avatar">👩</div>
-        <div><div class="testi-name">Priya Sharma</div><div class="testi-loc">Delhi, India</div></div>
-      </div>
+      <p class="testi-quote">The bellbottoms are EVERYTHING. Wore them to college and literally everyone stopped to ask where I got them. Quality is fire!</p>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Rohan Kapoor</div><div class="testi-loc">Delhi, India</div></div></div>
     </div>
     <div class="testi-card">
       <div class="big-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">Got 3 pairs already and each one gets compliments everywhere I go. SoleToStyle is genuinely my go-to for footwear now!</p>
-      <div class="testi-author">
-        <div class="testi-avatar">👨</div>
-        <div><div class="testi-name">Arjun Mehta</div><div class="testi-loc">Mumbai, India</div></div>
-      </div>
+      <p class="testi-quote">Ordered the formal baggy trousers for an interview — got the job AND got compliments on my fit. This brand understands style!</p>
+      <div class="testi-author"><div class="testi-avatar">👩</div><div><div class="testi-name">Sneha Patel</div><div class="testi-loc">Ahmedabad, India</div></div></div>
     </div>
     <div class="testi-card">
       <div class="big-quote">"</div>
       <div class="testi-stars">★★★★★</div>
-      <p class="testi-quote">Packaging is so beautiful, felt like a luxury brand experience. The sandals are stunning and super comfortable. Will order again!</p>
-      <div class="testi-author">
-        <div class="testi-avatar">👩</div>
-        <div><div class="testi-name">Ananya Verma</div><div class="testi-loc">Bangalore, India</div></div>
-      </div>
+      <p class="testi-quote">Premium shirts at this price? Unreal. The fabric, the fit, the finish — feels like a designer brand. Will always come back!</p>
+      <div class="testi-author"><div class="testi-avatar">👨</div><div><div class="testi-name">Arjun Singh</div><div class="testi-loc">Chandigarh, India</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- INSTAGRAM -->
+<!-- INSTA -->
 <section class="insta-strip" id="insta">
-  <h2 class="section-title">As Seen on</h2>
+  <h2 class="section-title" style="margin-bottom:12px">As Seen on</h2>
   <span class="insta-handle">@soletostylee</span>
   <div class="insta-grid">
-    <div class="insta-item ig-bg-1">👠</div>
-    <div class="insta-item ig-bg-2">👟</div>
-    <div class="insta-item ig-bg-3">🥾</div>
-    <div class="insta-item ig-bg-4">🩴</div>
-    <div class="insta-item ig-bg-5">👞</div>
-    <div class="insta-item ig-bg-6">👡</div>
+    <div class="insta-item ig-bg-1">👖</div>
+    <div class="insta-item ig-bg-2">👕</div>
+    <div class="insta-item ig-bg-3">🧥</div>
+    <div class="insta-item ig-bg-4">🩳</div>
+    <div class="insta-item ig-bg-5">👔</div>
+    <div class="insta-item ig-bg-6">👗</div>
   </div>
 </section>
 
 <!-- NEWSLETTER -->
 <section class="newsletter">
-  <h2 class="newsletter-title">Get Exclusive Drops</h2>
-  <p class="newsletter-sub">Subscribe for early access, style tips, and members-only offers.</p>
+  <h2 class="newsletter-title">Get First Dibs on New Drops</h2>
+  <p class="newsletter-sub">Join 8,000+ styleheads. First access to new arrivals, member deals & style inspo.</p>
   <div class="newsletter-form">
     <input class="newsletter-input" type="email" placeholder="your@email.com">
     <button class="newsletter-btn">Subscribe</button>
@@ -1085,7 +470,7 @@
   <div class="footer-top">
     <div>
       <span class="footer-logo"><span>Sole</span>ToStyle</span>
-      <p class="footer-tagline">Step into your story. Premium handcrafted footwear for the fashion-forward. Walk with intent, walk with style.</p>
+      <p class="footer-tagline">Wear your identity. From bellbottom flares to premium shirts — fashion that speaks before you do. Made for the bold.</p>
       <div class="social-links">
         <a class="social-link" href="https://www.instagram.com/soletostylee" target="_blank">📷</a>
         <a class="social-link" href="#">𝕏</a>
@@ -1097,10 +482,11 @@
       <div class="footer-heading">Shop</div>
       <ul class="footer-links">
         <li><a href="#">New Arrivals</a></li>
-        <li><a href="#">Women's Heels</a></li>
-        <li><a href="#">Men's Formal</a></li>
-        <li><a href="#">Sneakers</a></li>
-        <li><a href="#">Sandals</a></li>
+        <li><a href="#">Bellbottom Jeans</a></li>
+        <li><a href="#">Baggy Pants</a></li>
+        <li><a href="#">Formal Baggy</a></li>
+        <li><a href="#">T-Shirts</a></li>
+        <li><a href="#">Premium Shirts</a></li>
         <li><a href="#">Sale</a></li>
       </ul>
     </div>
@@ -1112,157 +498,117 @@
         <li><a href="#">Returns & Exchange</a></li>
         <li><a href="#">Shipping Policy</a></li>
         <li><a href="#">FAQs</a></li>
+        <li><a href="#">Care Instructions</a></li>
       </ul>
     </div>
     <div>
       <div class="footer-heading">Contact</div>
       <ul class="footer-links">
         <li><a href="#">📱 DM on Instagram</a></li>
-        <li><a href="#">📧 hello@soletostyle.in</a></li>
+        <li><a href="#">📧 <span class="__cf_email__" data-cfemail="ef878a838380af9c80838a9b809c9b96838ac18681">[email&#160;protected]</span></a></li>
         <li><a href="#">📞 +91 98765 43210</a></li>
-        <li style="color:var(--muted);font-size:0.75rem;margin-top:12px;">Mon–Sat: 10AM – 7PM</a></li>
+        <li style="color:var(--muted);font-size:.73rem;margin-top:10px">Mon–Sat: 10AM – 7PM</li>
       </ul>
     </div>
   </div>
   <div class="footer-bottom">
     <p class="footer-copy">© 2025 SoleToStyle. All rights reserved. Made with ♡ in India.</p>
     <div class="payment-icons">
-      <span class="pay-icon">UPI</span>
-      <span class="pay-icon">Visa</span>
-      <span class="pay-icon">MC</span>
-      <span class="pay-icon">COD</span>
+      <span class="pay-icon">UPI</span><span class="pay-icon">Visa</span><span class="pay-icon">MC</span><span class="pay-icon">COD</span>
     </div>
   </div>
 </footer>
 
-<script>
-// ── CURSOR ──
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursorRing');
-document.addEventListener('mousemove', e => {
-  cursor.style.left = e.clientX + 'px';
-  cursor.style.top = e.clientY + 'px';
-  setTimeout(() => {
-    ring.style.left = e.clientX + 'px';
-    ring.style.top = e.clientY + 'px';
-  }, 80);
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+// CURSOR
+const cursor=document.getElementById('cursor'), ring=document.getElementById('cursorRing');
+document.addEventListener('mousemove',e=>{
+  cursor.style.left=e.clientX+'px'; cursor.style.top=e.clientY+'px';
+  setTimeout(()=>{ ring.style.left=e.clientX+'px'; ring.style.top=e.clientY+'px'; },75);
 });
 
-// ── PRODUCTS DATA ──
-const products = [
-  { id:1, name:'Noir Block Heel', type:'Heels', price:2499, oldPrice:3499, emoji:'👠', badge:'new', category:'women', sizes:['35','36','37','38','39','40'], rating:'★★★★★' },
-  { id:2, name:'Ivory Cloud Sneaker', type:'Sneakers', price:1899, oldPrice:null, emoji:'👟', badge:'hot', category:'men', sizes:['6','7','8','9','10','11'], rating:'★★★★☆' },
-  { id:3, name:'Rustic Leather Oxford', type:'Formal', price:3299, oldPrice:4299, emoji:'👞', badge:'sale', category:'men', sizes:['7','8','9','10'], rating:'★★★★★' },
-  { id:4, name:'Golden Strap Sandal', type:'Sandals', price:1299, oldPrice:null, emoji:'🩴', badge:'new', category:'women', sizes:['36','37','38','39'], rating:'★★★★☆' },
-  { id:5, name:'Midnight Chelsea Boot', type:'Boots', price:3999, oldPrice:5499, emoji:'🥾', badge:'sale', category:'men', sizes:['7','8','9','10','11'], rating:'★★★★★' },
-  { id:6, name:'Rose Kitten Mule', type:'Mules', price:1799, oldPrice:null, emoji:'👡', badge:'hot', category:'women', sizes:['35','36','37','38','39'], rating:'★★★★★' },
-  { id:7, name:'Urban Runner Pro', type:'Sneakers', price:2299, oldPrice:2999, emoji:'👟', badge:'sale', category:'men', sizes:['6','7','8','9','10'], rating:'★★★★☆' },
-  { id:8, name:'Pearl Strappy Heel', type:'Heels', price:2799, oldPrice:null, emoji:'👠', badge:'new', category:'women', sizes:['36','37','38','39','40'], rating:'★★★★★' },
+// PRODUCTS
+const products=[
+  {id:1, name:'Midnight Flare Jean',      type:'Bellbottom Jeans', price:1799,oldPrice:2499,img:'https://images.unsplash.com/photo-1594938298603-c8148c4b4c7a?w=600&q=80',badge:'new', cat:'bellbottom',sizes:['28','30','32','34','36'],colors:['#1a1a2e','#2d1b4e','#0d2137'],rating:'★★★★★'},
+  {id:2, name:'Retro Raw Bellbottom',     type:'Bellbottom Jeans', price:1599,oldPrice:2199,img:'https://images.unsplash.com/photo-1541099649105-f69ad21f3246?w=600&q=80',badge:'hot', cat:'bellbottom',sizes:['28','30','32','34'],      colors:['#3d2b10','#8b7355','#1a1a1a'],rating:'★★★★☆'},
+  {id:3, name:'Ivory Wide Flare',         type:'Bellbottom Jeans', price:1699,oldPrice:null, img:'https://images.unsplash.com/photo-1604176354204-9268737828e4?w=600&q=80',badge:'new', cat:'bellbottom',sizes:['28','30','32','34','36'],colors:['#f5f0e8','#e8ddd0','#0a0a0a'],rating:'★★★★★'},
+  {id:4, name:'Urban Cargo Baggy',        type:'Baggy Pants',      price:1499,oldPrice:1999,img:'https://images.unsplash.com/photo-1552902865-b72c031ac5ea?w=600&q=80',badge:'sale',cat:'baggy',     sizes:['S','M','L','XL','XXL'],  colors:['#2d2d2d','#8b7355','#1f3d1f'],rating:'★★★★☆'},
+  {id:5, name:'Cloud Linen Baggy',        type:'Baggy Pants',      price:1399,oldPrice:null, img:'https://images.unsplash.com/photo-1473966968600-fa801b869a1a?w=600&q=80',badge:'new', cat:'baggy',     sizes:['S','M','L','XL'],        colors:['#f5f0e8','#d4c5b0','#c9a84c'],rating:'★★★★★'},
+  {id:6, name:'Black Label Formal Trouser',type:'Formal Baggy',    price:2299,oldPrice:3199,img:'https://images.unsplash.com/photo-1594938374182-a57369b08e9e?w=600&q=80',badge:'sale',cat:'formal',    sizes:['28','30','32','34','36'],colors:['#0a0a0a','#1a1a2e','#3d2b00'],rating:'★★★★★'},
+  {id:7, name:'Charcoal Drape Pant',      type:'Formal Baggy',     price:2499,oldPrice:null, img:'https://images.unsplash.com/photo-1547257965-b8eaa24e5c9a?w=600&q=80',badge:'new', cat:'formal',    sizes:['28','30','32','34'],      colors:['#3a3a3a','#5c5c5c','#c9a84c'],rating:'★★★★★'},
+  {id:8, name:'Essential Oversized Tee',  type:'T-Shirt',          price:699, oldPrice:999, img:'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=600&q=80',badge:'sale',cat:'tshirt',    sizes:['S','M','L','XL','XXL'],  colors:['#ffffff','#1a1a1a','#c9a84c'],rating:'★★★★☆'},
+  {id:9, name:'Acid Wash Graphic Tee',    type:'T-Shirt',          price:899, oldPrice:null, img:'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=600&q=80',badge:'hot', cat:'tshirt',    sizes:['S','M','L','XL'],        colors:['#8b7355','#1a1a2e','#2d1b00'],rating:'★★★★★'},
+  {id:10,name:'Linen Striped Shirt',      type:'Premium Shirt',    price:1999,oldPrice:2699,img:'https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=600&q=80',badge:'sale',cat:'shirt',     sizes:['S','M','L','XL','XXL'],  colors:['#f5f0e8','#c9a84c','#0a0a0a'],rating:'★★★★★'},
+  {id:11,name:'Cuban Collar Premium',     type:'Premium Shirt',    price:1799,oldPrice:null, img:'https://images.unsplash.com/photo-1607345366928-199ea26cfe3e?w=600&q=80',badge:'new', cat:'shirt',     sizes:['S','M','L','XL'],        colors:['#0a0a0a','#1a1f3d','#3d1f00'],rating:'★★★★★'},
+  {id:12,name:'Oxford Business Shirt',    type:'Premium Shirt',    price:2199,oldPrice:2999,img:'https://images.unsplash.com/photo-1620012253295-c15cc3e65df4?w=600&q=80',badge:'hot', cat:'shirt',     sizes:['S','M','L','XL','XXL'],  colors:['#ffffff','#c9a84c','#1a1a1a'],rating:'★★★★☆'},
 ];
 
-let cart = [];
-let currentFilter = 'all';
+let cart=[];
 
-function renderProducts(filter) {
-  const grid = document.getElementById('productGrid');
-  const filtered = filter === 'all' ? products :
-    filter === 'new' ? products.filter(p => p.badge === 'new') :
-    filter === 'bestseller' ? products.filter(p => p.badge === 'hot') :
-    filter === 'sale' ? products.filter(p => p.badge === 'sale') :
-    products.filter(p => p.category === filter);
-
-  grid.innerHTML = filtered.map(p => `
+function renderProducts(filter){
+  const grid=document.getElementById('productGrid');
+  const list=filter==='all'?products:filter==='sale'?products.filter(p=>p.badge==='sale'):products.filter(p=>p.cat===filter);
+  grid.innerHTML=list.map(p=>`
     <div class="product-card">
       <div class="product-img">
-        <div class="product-img-inner">${p.emoji}<span style="font-size:0.65rem;letter-spacing:2px;color:var(--muted);font-family:'DM Sans',sans-serif;text-transform:uppercase;">${p.type}</span></div>
-        <div class="product-overlay">
-          <button class="overlay-btn" onclick="addToCart(${p.id})">+ Add to Bag</button>
+        <div class="product-img-inner" style="padding:0;align-items:stretch">
+          <img src="${p.img}" alt="${p.name}" style="width:100%;height:100%;object-fit:cover;display:block;position:absolute;inset:0" onerror="this.style.display='none'">
         </div>
+        <div class="product-overlay"><button class="overlay-btn" onclick="addToCart(${p.id})">+ Add to Bag</button></div>
         <button class="wishlist-btn">♡</button>
-        <span class="product-badge badge-${p.badge}">${p.badge === 'new' ? 'New' : p.badge === 'hot' ? '🔥 Hot' : 'Sale'}</span>
+        <span class="product-badge badge-${p.badge}">${p.badge==='new'?'New':p.badge==='hot'?'🔥 Hot':'Sale'}</span>
       </div>
       <div class="product-name">${p.name}</div>
       <div class="product-type">${p.type}</div>
       <div class="product-price">
         <span class="price">₹${p.price.toLocaleString()}</span>
-        ${p.oldPrice ? `<span class="price-old">₹${p.oldPrice.toLocaleString()}</span>` : ''}
+        ${p.oldPrice?`<span class="price-old">₹${p.oldPrice.toLocaleString()}</span>`:''}
       </div>
       <div class="stars">${p.rating}</div>
-      <div class="size-selector">
-        ${p.sizes.slice(0,5).map(s => `<span class="size-chip">${s}</span>`).join('')}
-      </div>
+      <div class="color-dots">${p.colors.map(c=>`<div class="cdot" style="background:${c}"></div>`).join('')}</div>
+      <div class="size-selector">${p.sizes.slice(0,5).map(s=>`<span class="size-chip">${s}</span>`).join('')}</div>
     </div>
   `).join('');
 }
 
-function setFilter(btn, filter) {
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+function setFilter(btn,filter){
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
   btn.classList.add('active');
   renderProducts(filter);
 }
 
-function addToCart(id) {
-  const p = products.find(x => x.id === id);
-  const existing = cart.find(x => x.id === id);
-  if (existing) existing.qty++;
-  else cart.push({ ...p, qty: 1 });
+function addToCart(id){
+  const p=products.find(x=>x.id===id);
+  const ex=cart.find(x=>x.id===id);
+  if(ex)ex.qty++;else cart.push({...p,qty:1});
   updateCartUI();
-  showToast(`${p.name} added to bag!`);
+  showToast(`${p.name} added! 🛍️`);
 }
 
-function updateCartUI() {
-  const count = cart.reduce((a, x) => a + x.qty, 0);
-  document.getElementById('cartCount').textContent = count;
-
-  const itemsEl = document.getElementById('cartItems');
-  const totalEl = document.getElementById('cartTotal');
-  const checkoutBtn = document.getElementById('checkoutBtn');
-  const emptyCart = document.getElementById('emptyCart');
-
-  if (cart.length === 0) {
-    itemsEl.innerHTML = '';
-    totalEl.style.display = 'none';
-    checkoutBtn.style.display = 'none';
-    emptyCart.style.display = 'block';
-    return;
-  }
-
-  emptyCart.style.display = 'none';
-  totalEl.style.display = 'flex';
-  checkoutBtn.style.display = 'block';
-
-  const total = cart.reduce((a, x) => a + x.price * x.qty, 0);
-  document.getElementById('totalPrice').textContent = `₹${total.toLocaleString()}`;
-
-  itemsEl.innerHTML = cart.map(item => `
+function updateCartUI(){
+  const count=cart.reduce((a,x)=>a+x.qty,0);
+  document.getElementById('cartCount').textContent=count;
+  const itemsEl=document.getElementById('cartItems');
+  const totalEl=document.getElementById('cartTotal');
+  const checkoutBtn=document.getElementById('checkoutBtn');
+  const emptyCart=document.getElementById('emptyCart');
+  if(!cart.length){itemsEl.innerHTML='';totalEl.style.display='none';checkoutBtn.style.display='none';emptyCart.style.display='block';return;}
+  emptyCart.style.display='none';totalEl.style.display='flex';checkoutBtn.style.display='block';
+  const total=cart.reduce((a,x)=>a+x.price*x.qty,0);
+  document.getElementById('totalPrice').textContent=`₹${total.toLocaleString()}`;
+  itemsEl.innerHTML=cart.map(item=>`
     <div class="cart-item">
-      <div class="cart-item-img">${item.emoji}</div>
-      <div>
-        <div class="cart-item-name">${item.name}</div>
-        <div class="cart-item-size">Qty: ${item.qty}</div>
-      </div>
-      <div class="cart-item-price">₹${(item.price * item.qty).toLocaleString()}</div>
+      <div class="cart-item-img"><img src="${item.img}" style="width:100%;height:100%;object-fit:cover" onerror="this.parentNode.textContent='🧥'"></div>
+      <div><div class="cart-item-name">${item.name}</div><div class="cart-item-size">Qty: ${item.qty}</div></div>
+      <div class="cart-item-price">₹${(item.price*item.qty).toLocaleString()}</div>
     </div>
   `).join('');
 }
 
-function toggleCart() {
-  const drawer = document.getElementById('cartDrawer');
-  const overlay = document.getElementById('overlay');
-  drawer.classList.toggle('open');
-  overlay.classList.toggle('open');
+function toggleCart(){
+  document.getElementById('cartDrawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
 }
 
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.textContent = msg;
-  toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-// Init
-renderProducts('all');
-updateCartUI();
-</script>
-</body>
-</html>
+function showToast(msg){
+  cons
